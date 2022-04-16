@@ -133,9 +133,12 @@ class OnboardingScreen extends StatelessWidget {
           CustomButton(
             width: index == 2 ? 100.w : 70.w,
             onTap: () {
-              index == 2
-                  ? Get.offAll(() => const StartingScreen())
-                  : model.animateToPage(model.currentIndexPage! + 1);
+              if (index == 2) {
+                model.localStorageService.setOnBoardingPageCount = 3;
+                Get.offAll(() => const StartingScreen());
+              } else {
+                model.animateToPage(model.currentIndexPage! + 1);
+              }
             },
             buttonColor: model.onboardings[index].buttonColor,
             textColor: Colors.white,
@@ -146,6 +149,7 @@ class OnboardingScreen extends StatelessWidget {
               ? Container()
               : TextButton(
                   onPressed: () {
+                    model.localStorageService.setOnBoardingPageCount = 3;
                     Get.offAll(() => const StartingScreen());
                   },
                   child: Text('SKIP',
