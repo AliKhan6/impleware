@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "991196592696",
+    "firebase_url": "https://impleware-default-rtdb.firebaseio.com",
+    "project_id": "impleware",
+    "storage_bucket": "impleware.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:991196592696:android:80bb8ec150d08e2a9a84cd",
+        "android_client_info": {
+          "package_name": "com.impleware.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "991196592696-gcqrgq9lahcfkvkq1mdaiisg5ov31igb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBSVZ3RqWqq8KyeCDZyV6DcC2vzoeBgzrs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "991196592696-gcqrgq9lahcfkvkq1mdaiisg5ov31igb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
