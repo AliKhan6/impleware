@@ -3,6 +3,8 @@ import 'package:calkitna_mobile_app/core/models/home.dart';
 import 'package:calkitna_mobile_app/core/services/auth_service.dart';
 import 'package:calkitna_mobile_app/core/view_models.dart/base_view_model.dart';
 import 'package:calkitna_mobile_app/locator.dart';
+import 'package:calkitna_mobile_app/ui/screens/medical_record/medical_record_screen.dart';
+import 'package:get/get.dart';
 
 class HomeViewModel extends BaseViewModel {
   final authService = locator<AuthService>();
@@ -19,7 +21,9 @@ class HomeViewModel extends BaseViewModel {
     HomeData(
         image: '$staticAsset/medical_record.png',
         title: 'Medical Record',
-        onTap: () {}),
+        onTap: () {
+          Get.to(() => const MedicalRecordScreen());
+        }),
     HomeData(
         image: '$staticAsset/pill_reminder.png',
         title: 'Pill Reminder',

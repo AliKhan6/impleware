@@ -23,6 +23,7 @@ class CustomTextField extends StatelessWidget {
   final Color? fillColor;
   final bool? isElevated;
   final onChange;
+  final initialValue;
   CustomTextField(
       {this.controller,
       this.prefixIcon,
@@ -42,6 +43,7 @@ class CustomTextField extends StatelessWidget {
       this.fillColor = Colors.white,
       this.suffixIcon,
       this.onChange,
+      this.initialValue,
       this.isElevated = false});
   @override
   Widget build(BuildContext context) {
@@ -68,6 +70,7 @@ class CustomTextField extends StatelessWidget {
                       : const BoxShadow(color: Colors.transparent),
                 ])),
         TextFormField(
+          initialValue: initialValue ?? '',
           onChanged: onChange,
           maxLines: maxline,
           onTap: ontap,

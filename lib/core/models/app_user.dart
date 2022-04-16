@@ -6,6 +6,7 @@ class AppUser {
   String? username;
   String? emirateNumber;
   String? fcmToken;
+  String? imageUrl;
 
   AppUser({
     this.id,
@@ -15,6 +16,7 @@ class AppUser {
     this.username,
     this.emirateNumber,
     this.fcmToken,
+    this.imageUrl,
   });
 
   Map<String, dynamic> toJson() {
@@ -25,7 +27,7 @@ class AppUser {
     data['username'] = username;
     data['emirateNumber'] = emirateNumber;
     data['fcmToken'] = fcmToken;
-
+    data['imageUrl'] = imageUrl;
     return data;
   }
 
@@ -36,5 +38,6 @@ class AppUser {
     username = json['username'];
     emirateNumber = json['emirateNumber'];
     fcmToken = json['fcmToken'];
+    imageUrl = json['imageUrl'];
   }
 }
