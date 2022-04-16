@@ -1,15 +1,16 @@
 import 'package:calkitna_mobile_app/core/constants/colors.dart';
 import 'package:calkitna_mobile_app/core/constants/strings.dart';
 import 'package:calkitna_mobile_app/core/constants/style.dart';
+import 'package:calkitna_mobile_app/core/enums/view_state.dart';
 import 'package:calkitna_mobile_app/core/others/screen_utils.dart';
 import 'package:calkitna_mobile_app/ui/custom_widgets/custom_button.dart';
 import 'package:calkitna_mobile_app/ui/custom_widgets/custom_text_field.dart';
 import 'package:calkitna_mobile_app/ui/custom_widgets/social_auth_button.dart';
 import 'package:calkitna_mobile_app/ui/screens/auth_screens/login/login_view_model.dart';
 import 'package:calkitna_mobile_app/ui/screens/auth_screens/signup/signup_screen.dart';
-import 'package:calkitna_mobile_app/ui/screens/home/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:provider/provider.dart';
 import 'dart:io' show Platform;
 
@@ -22,82 +23,88 @@ class LoginScreen extends StatelessWidget {
       create: (context) => LoginViewModel(),
       child: Consumer<LoginViewModel>(
         builder: (context, model, child) {
-          return Scaffold(
-            body: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.only(
-                    left: 10.0, right: 27, top: 65, bottom: 30),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    IconButton(
-                        onPressed: () => Get.back(),
-                        icon: const Icon(Icons.arrow_back, color: blackColor)),
-                    SizedBox(height: 30.h),
+          return ModalProgressHUD(
+            inAsyncCall: model.state == ViewState.busy,
+            child: Scaffold(
+              body: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                      left: 10.0, right: 27, top: 65, bottom: 30),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      IconButton(
+                          onPressed: () => Get.back(),
+                          icon:
+                              const Icon(Icons.arrow_back, color: blackColor)),
+                      SizedBox(height: 30.h),
 
-                    /// title
-                    Padding(
-                      padding: const EdgeInsets.only(left: 15),
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'LOGIN',
-                              style: headingTextStyleRoboto.copyWith(
-                                  fontSize: 28.sp,
-                                  color: const Color(0xFF756DB8)),
-                            ),
-                            SizedBox(height: 40.h),
+                      /// title
+                      Padding(
+                        padding: const EdgeInsets.only(left: 15),
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'LOGIN',
+                                style: headingTextStyleRoboto.copyWith(
+                                    fontSize: 28.sp,
+                                    color: const Color(0xFF756DB8)),
+                              ),
+                              SizedBox(height: 40.h),
 
-                            ///
-                            /// Text fields
-                            textFields(model),
-                            SizedBox(height: 40.h),
+                              ///
+                              /// Text fields
+                              textFields(model),
+                              SizedBox(height: 40.h),
 
-                            ///
-                            /// Login button
-                            CustomButton(
-                              text: 'Login',
-                              buttonColor: const Color(0xFF756DB8),
-                              onTap: () {
-                                Get.offAll(() => const HomeScreen());
-                              },
-                              textColor: Colors.white,
-                            ),
-                            SizedBox(height: 24.h),
-                            // Center(
-                            //   child: Text('Or continue with',
-                            //       style: bodyTextStyleAssistant.copyWith(
-                            //           fontSize: 14.sp, color: const Color(0xFF707070))),
-                            // ),
-                            SizedBox(height: 29.h),
-                            GestureDetector(
-                              onTap: () => Get.to(() => const SignUpScreen()),
-                              child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      "If you don't have an account, try",
-                                      style: bodyTextStyleAssistant.copyWith(
-                                          fontSize: 14.sp,
-                                          color: const Color(0xFF707070)),
-                                    ),
-                                    SizedBox(width: 7.w),
-                                    Text('Signing Up here.',
+                              ///
+                              /// Login button
+                              CustomButton(
+                                text: 'Login',
+                                buttonColor: const Color(0xFF756DB8),
+                                onTap: () {
+                                  model.login();
+                                },
+                                textColor: Colors.white,
+                              ),
+                              SizedBox(height: 24.h),
+                              // Center(
+                              //   child: Text('Or continue with',
+                              //       style: bodyTextStyleAssistant.copyWith(
+                              //           fontSize: 14.sp, color: const Color(0xFF707070))),
+                              // ),
+                              SizedBox(height: 29.h),
+                              GestureDetector(
+                                onTap: () => Get.to(() => const SignUpScreen()),
+                                child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        "If you don't have an account, try",
                                         style: bodyTextStyleAssistant.copyWith(
-                                            color: const Color(0xFF756DB8),
                                             fontSize: 14.sp,
-                                            decoration:
-                                                TextDecoration.underline))
-                                  ]),
-                            )
-                          ]),
-                    )
+                                            color: const Color(0xFF707070)),
+                                      ),
+                                      SizedBox(width: 7.w),
+                                      Text('Signing Up here.',
+                                          style:
+                                              bodyTextStyleAssistant.copyWith(
+                                                  color:
+                                                      const Color(0xFF756DB8),
+                                                  fontSize: 14.sp,
+                                                  decoration:
+                                                      TextDecoration.underline))
+                                    ]),
+                              )
+                            ]),
+                      )
 
-                    ///
-                    /// Social login buttons
-                    // socailAuthButtons(model),
-                  ],
+                      ///
+                      /// Social login buttons
+                      // socailAuthButtons(model),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -117,7 +124,9 @@ class LoginScreen extends StatelessWidget {
       SizedBox(height: 8.h),
       CustomTextField(
         fillColor: const Color(0xFFEBEBEB),
-        onChange: (value) {},
+        onChange: (value) {
+          model.appUser.email = value;
+        },
         inputType: TextInputType.emailAddress,
         disableBorder: true,
       ),
@@ -132,7 +141,9 @@ class LoginScreen extends StatelessWidget {
       SizedBox(height: 8.h),
       CustomTextField(
           fillColor: const Color(0xFFEBEBEB),
-          onChange: (value) {},
+          onChange: (value) {
+            model.appUser.password = value;
+          },
           inputType: TextInputType.emailAddress,
           disableBorder: true,
           obscure: model.isShowPassword,

@@ -22,10 +22,9 @@ class MyApp extends StatelessWidget {
       designSize: const Size(393, 851),
       builder: () => GetMaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'Flutter Demo',
+        title: 'Impleware',
         theme: ThemeData(
-          primaryColor: primaryColor,
-          primarySwatch: Colors.blue,
+          colorScheme: ColorScheme.fromSwatch().copyWith(primary: primaryColor),
         ),
         home: const SplashScreen(),
       ),

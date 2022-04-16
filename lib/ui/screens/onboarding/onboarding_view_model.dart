@@ -2,12 +2,16 @@ import 'package:calkitna_mobile_app/core/constants/colors.dart';
 import 'package:calkitna_mobile_app/core/constants/strings.dart';
 import 'package:calkitna_mobile_app/core/enums/view_state.dart';
 import 'package:calkitna_mobile_app/core/models/onboarding.dart';
+import 'package:calkitna_mobile_app/core/services/locato_storage_service.dart';
 import 'package:calkitna_mobile_app/core/view_models.dart/base_view_model.dart';
 import 'package:flutter/material.dart';
+
+import '../../../locator.dart';
 
 class OnboardingViewModel extends BaseViewModel {
   int? currentIndexPage;
   PageController? onboardController;
+  final localStorageService = locator<LocalStorageService>();
 
   OnboardingViewModel() {
     currentIndexPage = 0;
@@ -21,6 +25,7 @@ class OnboardingViewModel extends BaseViewModel {
   }
 
   animateToPage(int index) {
+    localStorageService.setNotificationsCount = index;
     onboardController!.animateToPage(index,
         curve: Curves.easeIn, duration: const Duration(milliseconds: 300));
   }

@@ -18,12 +18,16 @@ class SignupViewModel extends BaseViewModel {
   registerUser() async {
     setState(ViewState.busy);
     debugPrint('appUser => ${appUser.toJson()}');
-  CustomAuthResult authResult =  await _authService.signUpWithEmailPassword(appUser);
-  if(authResult.status == true){
-    Get.offAll(() => const HomeScreen());
-  }else{
-    // Get.dialog()
-  }
+    CustomAuthResult authResult =
+        await _authService.signUpWithEmailPassword(appUser);
+    if (authResult.status == true) {
+      Get.offAll(() => const HomeScreen());
+    } else {
+      Get.defaultDialog(
+          title: 'Error Signup',
+          middleText: authResult.errorMessage ??
+              'An error occured while signing up.\nCheck you internet and try again.');
+    }
   }
 
   showPassword() {
