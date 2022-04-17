@@ -1,8 +1,10 @@
 import 'package:calkitna_mobile_app/core/constants/strings.dart';
 import 'package:calkitna_mobile_app/core/constants/style.dart';
 import 'package:calkitna_mobile_app/ui/screens/drawer/drawer_view_model.dart';
+import 'package:calkitna_mobile_app/ui/screens/profile/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 class DrawerScreen extends StatelessWidget {
@@ -80,7 +82,9 @@ class DrawerScreen extends StatelessWidget {
                     /// notificaiton
                     SizedBox(height: 8.h),
                     InkWell(
-                      onTap: () {},
+                      onTap: () {
+                        Get.to(() => const ProfileScreen());
+                      },
                       child: Row(
                         children: [
                           const Icon(Icons.person),
@@ -99,7 +103,9 @@ class DrawerScreen extends StatelessWidget {
                     /// notificaiton
                     SizedBox(height: 8.h),
                     InkWell(
-                      onTap: () {},
+                      onTap: () {
+                        model.logout();
+                      },
                       child: Row(
                         children: [
                           const Icon(Icons.logout),
