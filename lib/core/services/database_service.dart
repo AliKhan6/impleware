@@ -1,3 +1,4 @@
+import 'package:calkitna_mobile_app/core/models/allergy.dart';
 import 'package:calkitna_mobile_app/core/models/app_user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
@@ -20,7 +21,7 @@ class DatabaseService {
           .collection('app_user')
           .doc(user.id)
           .set(user.toJson())
-          .then(( value) => debugPrint('user registered successfully'));
+          .then((value) => debugPrint('user registered successfully'));
     } catch (e, s) {
       debugPrint('Exception @DatabaseService/registerAppUser');
       debugPrint(s.toString());
@@ -46,5 +47,26 @@ class DatabaseService {
   updateClientFcm(token, id) async {
     await _db.collection("app_user").doc(id).update({'fcmToken': token}).then(
         (value) => debugPrint('fcm updated successfully'));
+  }
+
+  Future<List<Allergy>> getAllergies() async {
+    debugPrint("getAllergies/");
+    try {
+      List<Allergy> post = [];
+      QuerySnapshot snapshot = await _db.collection('allergies').get();
+      if (snapshot.docs.isEmpty) {
+        debugPrint('No allergies found in db');
+      }
+      for (int i = 0; i < snapshot.docs.length; i++) {
+        post.add(
+            Allergy.fromJson(snapshot.docs[i].data(), snapshot.docs[i].id));
+      }
+      debugPrint('Allergies :: db => ${post.length}');
+
+      return post;
+    } catch (e, s) {
+      debugPrint("Exception/getAllergies=========> $e, $s");
+      return [];
+    }
   }
 }

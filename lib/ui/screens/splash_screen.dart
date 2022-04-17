@@ -23,6 +23,8 @@ class _SplashScreenState extends State<SplashScreen> {
   final _localStorateService = locator<LocalStorageService>();
 
   init() async {
+    await _localStorateService.init();
+    await Future.delayed(const Duration(milliseconds: 600));
     await _authService.init();
 
     if (_localStorateService.onBoardingPageCount <= 2) {
