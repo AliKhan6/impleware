@@ -31,8 +31,7 @@ class AppUser {
     return data;
   }
 
-  AppUser.fromJson(json, id) {
-    id = id;
+  AppUser.fromJson(json, this.id) {
     email = json['email'];
     name = json['name'];
     username = json['username'];

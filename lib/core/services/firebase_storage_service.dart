@@ -42,7 +42,7 @@ class FirebaseStorageService {
       });
       final imgUrl = await snapshot.ref.getDownloadURL();
       imagesUrl.add(imgUrl);
-      print('imageUrl[$i] =>  ${imagesUrl.length}');
+      debugPrint('imageUrl[$i] =>  ${imagesUrl.length}');
 
       // streamSubscription.cancel();
     }
