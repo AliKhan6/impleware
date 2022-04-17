@@ -1,5 +1,6 @@
 import 'package:calkitna_mobile_app/core/models/allergy.dart';
 import 'package:calkitna_mobile_app/core/models/app_user.dart';
+import 'package:calkitna_mobile_app/core/models/medicine.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -66,6 +67,48 @@ class DatabaseService {
       return post;
     } catch (e, s) {
       debugPrint("Exception/getAllergies=========> $e, $s");
+      return [];
+    }
+  }
+
+  /// Register app user
+  addMedicine(String id, Medicine medicine) async {
+    debugPrint("User @Id => $id");
+    try {
+      await _db
+          .collection('app_user')
+          .doc(id)
+          .collection('medicines')
+          .add(medicine.toJson())
+          .then((value) => debugPrint('medicines added successfully'));
+    } catch (e, s) {
+      debugPrint('Exception @DatabaseService/addMedicine');
+      debugPrint(s.toString());
+      return false;
+    }
+  }
+
+  Future<List<Medicine>> getAllMedicines(String id) async {
+    debugPrint("getAllMedicines/");
+    try {
+      List<Medicine> post = [];
+      QuerySnapshot snapshot = await _db
+          .collection('app_user')
+          .doc(id)
+          .collection('medicines')
+          .get();
+      if (snapshot.docs.isEmpty) {
+        debugPrint('No medicines found in db');
+      }
+      for (int i = 0; i < snapshot.docs.length; i++) {
+        post.add(
+            Medicine.fromJson(snapshot.docs[i].data(), snapshot.docs[i].id));
+      }
+      debugPrint('Medicines :: db => ${post.length}');
+
+      return post;
+    } catch (e, s) {
+      debugPrint("Exception/getMedicins=========> $e, $s");
       return [];
     }
   }

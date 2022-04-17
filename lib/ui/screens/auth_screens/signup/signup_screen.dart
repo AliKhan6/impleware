@@ -20,6 +20,8 @@ class SignUpScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final _formKey = GlobalKey<FormState>();
+
     return ChangeNotifierProvider(
       create: (context) => SignupViewModel(),
       child: Consumer<SignupViewModel>(
@@ -31,74 +33,83 @@ class SignUpScreen extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.only(
                       left: 10.0, right: 27, top: 65, bottom: 30),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      IconButton(
-                          onPressed: () => Get.back(),
-                          icon:
-                              const Icon(Icons.arrow_back, color: blackColor)),
-                      SizedBox(height: 30.h),
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        IconButton(
+                            onPressed: () => Get.back(),
+                            icon: const Icon(Icons.arrow_back,
+                                color: blackColor)),
+                        SizedBox(height: 30.h),
 
-                      /// title
-                      Padding(
-                        padding: const EdgeInsets.only(left: 15),
-                        child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'CREATE ACCOUNT',
-                                style: headingTextStyleRoboto.copyWith(
-                                    fontSize: 28.sp,
-                                    color: const Color(0xFF756DB8)),
-                              ),
-                              SizedBox(height: 40.h),
+                        /// title
+                        Padding(
+                          padding: const EdgeInsets.only(left: 15),
+                          child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'CREATE ACCOUNT',
+                                  style: headingTextStyleRoboto.copyWith(
+                                      fontSize: 28.sp,
+                                      color: const Color(0xFF756DB8)),
+                                ),
+                                SizedBox(height: 40.h),
 
-                              ///
-                              /// Text fields
-                              textFields(model),
-                              SizedBox(height: 40.h),
+                                ///
+                                /// Text fields
+                                textFields(model),
+                                SizedBox(height: 40.h),
 
-                              ///
-                              /// Login button
-                              CustomButton(
-                                text: 'Signup',
-                                buttonColor: const Color(0xFF756DB8),
-                                onTap: () {
-                                  model.registerUser();
-                                },
-                                textColor: Colors.white,
-                              ),
-                              SizedBox(height: 40.h),
-                              GestureDetector(
-                                onTap: () => Get.to(() => const LoginScreen()),
-                                child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        'Already have an account?',
-                                        style: bodyTextStyleAssistant.copyWith(
-                                            fontSize: 14.sp,
-                                            color: const Color(0xFF707070)),
-                                      ),
-                                      SizedBox(width: 7.w),
-                                      Text('Login',
+                                ///
+                                /// Login button
+                                CustomButton(
+                                  text: 'Signup',
+                                  buttonColor: const Color(0xFF756DB8),
+                                  onTap: () {
+                                    if (_formKey.currentState!.validate()) {
+                                      model.registerUser();
+                                    }
+                                  },
+                                  textColor: Colors.white,
+                                ),
+                                SizedBox(height: 40.h),
+                                GestureDetector(
+                                  onTap: () =>
+                                      Get.to(() => const LoginScreen()),
+                                  child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          'Already have an account?',
                                           style:
                                               bodyTextStyleAssistant.copyWith(
-                                                  color:
-                                                      const Color(0xFF262626),
                                                   fontSize: 14.sp,
-                                                  decoration:
-                                                      TextDecoration.underline))
-                                    ]),
-                              )
-                            ]),
-                      )
+                                                  color:
+                                                      const Color(0xFF707070)),
+                                        ),
+                                        SizedBox(width: 7.w),
+                                        Text('Login',
+                                            style:
+                                                bodyTextStyleAssistant.copyWith(
+                                                    color:
+                                                        const Color(0xFF262626),
+                                                    fontSize: 14.sp,
+                                                    decoration: TextDecoration
+                                                        .underline))
+                                      ]),
+                                )
+                              ]),
+                        )
 
-                      ///
-                      /// Social login buttons
-                      // socailAuthButtons(model),
-                    ],
+                        ///
+                        /// Social login buttons
+                        // socailAuthButtons(model),
+                      ],
+                    ),
                   ),
                 ),
               ),
