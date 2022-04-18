@@ -3,6 +3,7 @@ import 'package:calkitna_mobile_app/core/constants/style.dart';
 import 'package:calkitna_mobile_app/core/others/screen_utils.dart';
 import 'package:calkitna_mobile_app/core/services/auth_service.dart';
 import 'package:calkitna_mobile_app/core/services/locato_storage_service.dart';
+import 'package:calkitna_mobile_app/core/services/notification_service.dart';
 import 'package:calkitna_mobile_app/ui/custom_widgets/image_container.dart';
 import 'package:calkitna_mobile_app/ui/screens/auth_screens/login/login_screen.dart';
 import 'package:calkitna_mobile_app/ui/screens/home/home_screen.dart';
@@ -21,8 +22,10 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   final _authService = locator<AuthService>();
   final _localStorateService = locator<LocalStorageService>();
+  final _notificationService = locator<NotificationsService>();
 
   init() async {
+    await _notificationService.init();
     await _localStorateService.init();
     await Future.delayed(const Duration(milliseconds: 600));
     await _authService.init();

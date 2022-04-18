@@ -19,50 +19,52 @@ class ProfileScreen extends StatelessWidget {
       child: Consumer<ProfileViewModel>(
         builder: (context, model, child) {
           return Scaffold(
-            body: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: Column(children: [
-                SizedBox(height: 70.h),
-                customAppBar('Profile'),
-                SizedBox(height: 30.h),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
-                  child: Column(children: [
-                    model.authService.appUser.imageUrl == null
-                        ? CircleAvatar(
-                            backgroundImage:
-                                const AssetImage('$staticAsset/profile.jpg'),
-                            radius: 48.r)
-                        : CircleAvatar(
-                            backgroundImage: NetworkImage(
-                                model.authService.appUser.imageUrl!),
-                            radius: 48.r),
-                    SizedBox(height: 5.h),
-                    TextButton(
-                        onPressed: () {},
-                        child: Text(
-                          'Change Profile',
-                          style: bodyTextStyleRoboto.copyWith(
-                              fontSize: 17.sp,
-                              color: blueColor,
-                              decoration: TextDecoration.underline),
-                        )),
-                    SizedBox(height: 20.h),
+            body: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: Column(children: [
+                  SizedBox(height: 70.h),
+                  customAppBar('Profile'),
+                  SizedBox(height: 30.h),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    child: Column(children: [
+                      model.authService.appUser.imageUrl == null
+                          ? CircleAvatar(
+                              backgroundImage:
+                                  const AssetImage('$staticAsset/profile.jpg'),
+                              radius: 48.r)
+                          : CircleAvatar(
+                              backgroundImage: NetworkImage(
+                                  model.authService.appUser.imageUrl!),
+                              radius: 48.r),
+                      SizedBox(height: 5.h),
+                      TextButton(
+                          onPressed: () {},
+                          child: Text(
+                            'Change Profile',
+                            style: bodyTextStyleRoboto.copyWith(
+                                fontSize: 17.sp,
+                                color: blueColor,
+                                decoration: TextDecoration.underline),
+                          )),
+                      SizedBox(height: 20.h),
 
-                    ///
-                    /// textFields
-                    ///
-                    textFields(model),
-                    SizedBox(height: 30.h),
-                    CustomButton(
-                      buttonColor: primaryColor,
-                      text: 'SAVE CHANGES',
-                      textColor: Colors.black,
-                      onTap: () {},
-                    )
-                  ]),
-                ),
-              ]),
+                      ///
+                      /// textFields
+                      ///
+                      textFields(model),
+                      SizedBox(height: 30.h),
+                      CustomButton(
+                        buttonColor: primaryColor,
+                        text: 'SAVE CHANGES',
+                        textColor: Colors.black,
+                        onTap: () {},
+                      )
+                    ]),
+                  ),
+                ]),
+              ),
             ),
           );
         },

@@ -5,6 +5,7 @@ import 'package:calkitna_mobile_app/core/view_models.dart/base_view_model.dart';
 import 'package:calkitna_mobile_app/locator.dart';
 import 'package:calkitna_mobile_app/ui/screens/medical_record/medical_record_screen.dart';
 import 'package:calkitna_mobile_app/ui/screens/medication/medication_screen.dart';
+import 'package:calkitna_mobile_app/ui/screens/pill_reminder/pill_reminder_screen.dart';
 import 'package:calkitna_mobile_app/ui/screens/profile/profile_screen.dart';
 import 'package:get/get.dart';
 
@@ -29,7 +30,9 @@ class HomeViewModel extends BaseViewModel {
     HomeData(
         image: '$staticAsset/pill_reminder.png',
         title: 'Pill Reminder',
-        onTap: () {}),
+        onTap: () {
+          Get.to(() => const PillReminderScreen());
+        }),
     HomeData(
         image: '$staticAsset/symptom.png',
         title: 'Symptom Checker',
