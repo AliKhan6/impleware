@@ -8,19 +8,18 @@ import 'package:calkitna_mobile_app/locator.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 
-class MedicationViewModel extends BaseViewModel {
+class PillReminderViewModel extends BaseViewModel {
   final _dbService = DatabaseService();
   final _authService = locator<AuthService>();
   List<Medicine> medicines = [];
   final NotificationsService _notificationsService = NotificationsService();
 
-  MedicationViewModel() {
+  PillReminderViewModel() {
     getAllMedicines();
   }
 
   getAllMedicines() async {
     setState(ViewState.busy);
-    medicines = [];
     medicines = await _dbService.getAllMedicines(_authService.appUser.id!);
     setState(ViewState.idle);
   }

@@ -85,15 +85,18 @@ class AddMedicineViewModel extends BaseViewModel {
     );
     if (timeOfDay != null) {
       selectedTime1 = timeOfDay;
-      if (selectedTime1.hour == 0) {
-        medicine.time1 =
-            '${selectedTime1.hour + 12}:${selectedTime1.minute} am';
-      } else if (selectedTime1.hour < 12) {
-        medicine.time1 = '${selectedTime1.hour}:${selectedTime1.minute} am';
-      } else if (selectedTime1.hour > 12) {
-        medicine.time1 =
-            '${selectedTime1.hour - 12}:${selectedTime1.minute} pm';
-      }
+      // if (selectedTime1.hour == 0) {
+      medicine.time1 = '${selectedTime1.hour}:${selectedTime1.minute}';
+      // medicine.time1 =
+      //     '${selectedTime1.hour + 12}:${selectedTime1.minute} am';
+      // } else if (selectedTime1.hour < 12) {
+      //   medicine.time1 = '${selectedTime1.hour}:${selectedTime1.minute}';
+      //   // medicine.time1 = '${selectedTime1.hour}:${selectedTime1.minute} am';
+      // } else if (selectedTime1.hour > 12) {
+      //   medicine.time1 = '${selectedTime1.hour}:${selectedTime1.minute}';
+      //   // medicine.time1 =
+      //   //     '${selectedTime1.hour - 12}:${selectedTime1.minute} pm';
+      // }
       setState(ViewState.idle);
     }
     notifyListeners();
@@ -107,15 +110,7 @@ class AddMedicineViewModel extends BaseViewModel {
     );
     if (timeOfDay != null) {
       selectedTime2 = timeOfDay;
-      if (selectedTime2.hour == 0) {
-        medicine.time2 =
-            '${selectedTime2.hour + 12}:${selectedTime2.minute} am';
-      } else if (selectedTime2.hour < 12) {
-        medicine.time2 = '${selectedTime2.hour}:${selectedTime2.minute} am';
-      } else if (selectedTime2.hour > 12) {
-        medicine.time2 =
-            '${selectedTime2.hour - 12}:${selectedTime2.minute} pm';
-      }
+      medicine.time2 = '${selectedTime2.hour}:${selectedTime2.minute}';
       setState(ViewState.idle);
     }
     notifyListeners();
@@ -129,15 +124,7 @@ class AddMedicineViewModel extends BaseViewModel {
     );
     if (timeOfDay != null) {
       selectedTime3 = timeOfDay;
-      if (selectedTime3.hour == 0) {
-        medicine.time3 =
-            '${selectedTime3.hour + 12}:${selectedTime3.minute} am';
-      } else if (selectedTime3.hour < 12) {
-        medicine.time3 = '${selectedTime3.hour}:${selectedTime3.minute} am';
-      } else if (selectedTime3.hour > 12) {
-        medicine.time3 =
-            '${selectedTime3.hour - 12}:${selectedTime3.minute} pm';
-      }
+      medicine.time3 = '${selectedTime3.hour}:${selectedTime3.minute}';
       setState(ViewState.idle);
     }
     notifyListeners();

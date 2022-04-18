@@ -6,20 +6,21 @@ import 'package:calkitna_mobile_app/ui/custom_widgets/custom_app_bar.dart';
 import 'package:calkitna_mobile_app/ui/custom_widgets/image_container.dart';
 import 'package:calkitna_mobile_app/ui/screens/medication/add_medication.dart';
 import 'package:calkitna_mobile_app/ui/screens/medication/medication_view_model.dart';
+import 'package:calkitna_mobile_app/ui/screens/pill_reminder/pill_reminder_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:provider/provider.dart';
 
-class MedicationScreen extends StatelessWidget {
-  const MedicationScreen({Key? key}) : super(key: key);
+class PillReminderScreen extends StatelessWidget {
+  const PillReminderScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (context) => MedicationViewModel(),
-      child: Consumer<MedicationViewModel>(
+      create: (context) => PillReminderViewModel(),
+      child: Consumer<PillReminderViewModel>(
         builder: (context, model, child) {
           return ModalProgressHUD(
             inAsyncCall: model.state == ViewState.busy,
@@ -164,25 +165,6 @@ class MedicationScreen extends StatelessWidget {
                   )
                 ]),
               ),
-              floatingActionButton: FloatingActionButton(
-                onPressed: () async {
-                  model.medicines = await Get.to(
-                          () => AddMedication(list: model.medicines)) ??
-                      model.medicines;
-                  model.getAllMedicines();
-                  model.setState(ViewState.idle);
-                },
-                child: Container(
-                  child: const Center(
-                      child: Icon(
-                    Icons.add,
-                    color: Colors.white,
-                    size: 30,
-                  )),
-                  decoration: const BoxDecoration(
-                      shape: BoxShape.circle, color: primaryColor),
-                ),
-              ),
             ),
           );
         },
@@ -190,7 +172,7 @@ class MedicationScreen extends StatelessWidget {
     );
   }
 
-  searchField(MedicationViewModel model) {
+  searchField(PillReminderViewModel model) {
     return Container(
       height: 50.h,
       decoration: BoxDecoration(color: Colors.white, boxShadow: [

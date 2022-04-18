@@ -44,10 +44,10 @@ class AuthService extends ChangeNotifier {
       }
 
       if (credentials.user != null) {
-        this.appUser = appUser;
         customAuthResult.status = true;
         customAuthResult.user = credentials.user;
         appUser.id = credentials.user!.uid;
+        this.appUser = appUser;
 
         await _dbService.registerAppUser(appUser);
         notifyListeners();

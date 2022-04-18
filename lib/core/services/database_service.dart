@@ -88,6 +88,24 @@ class DatabaseService {
     }
   }
 
+  /// Register app user
+  updateMedicine(String id, Medicine medicine) async {
+    debugPrint("User @Id => $id");
+    try {
+      await _db
+          .collection('app_user')
+          .doc(id)
+          .collection('medicines')
+          .doc(medicine.id)
+          .update(medicine.toJson())
+          .then((value) => debugPrint('medicines added successfully'));
+    } catch (e, s) {
+      debugPrint('Exception @DatabaseService/addMedicine');
+      debugPrint(s.toString());
+      return false;
+    }
+  }
+
   Future<List<Medicine>> getAllMedicines(String id) async {
     debugPrint("getAllMedicines/");
     try {
