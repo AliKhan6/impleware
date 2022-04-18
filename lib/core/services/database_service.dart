@@ -1,10 +1,16 @@
 import 'package:calkitna_mobile_app/core/models/allergy.dart';
 import 'package:calkitna_mobile_app/core/models/app_user.dart';
 import 'package:calkitna_mobile_app/core/models/medicine.dart';
+import 'package:calkitna_mobile_app/core/models/pharmacist.dart';
+import 'package:calkitna_mobile_app/core/models/symptoms.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:firebase_database/firebase_database.dart';
+import '../models/chat.dart';
 
 class DatabaseService {
+  final firestoreRef = FirebaseFirestore.instance;
+  final firebaseDb = FirebaseDatabase.instance.reference().child('chat_system');
   final _db = FirebaseFirestore.instance;
   static final DatabaseService _singleton = DatabaseService._internal();
 
@@ -128,6 +134,89 @@ class DatabaseService {
     } catch (e, s) {
       debugPrint("Exception/getMedicins=========> $e, $s");
       return [];
+    }
+  }
+
+  ///
+  /// ==================>>>> Pharmacist users working area ================ ///
+  ///
+  Future<List<Pharmacist>> getPharmacists() async {
+    debugPrint("getAllPharmacists/");
+    try {
+      List<Pharmacist> post = [];
+      QuerySnapshot snapshot = await _db.collection('pharmacists').get();
+      if (snapshot.docs.isEmpty) {
+        debugPrint('No pharmacists found in db');
+      }
+      for (int i = 0; i < snapshot.docs.length; i++) {
+        post.add(
+            Pharmacist.fromJson(snapshot.docs[i].data(), snapshot.docs[i].id));
+      }
+      debugPrint('Pharmacists :: db => ${post.length}');
+      return post;
+    } catch (e, s) {
+      debugPrint("Exception/getPharmacists=========> $e, $s");
+      return [];
+    }
+  }
+
+  ///
+  /// disease symptoms
+  Future<List<Symptoms>> getSymptoms() async {
+    debugPrint("getSymptoms/");
+    try {
+      List<Symptoms> post = [];
+      QuerySnapshot snapshot = await _db.collection('symptoms').get();
+      if (snapshot.docs.isEmpty) {
+        debugPrint('No symptoms found in db');
+      }
+      for (int i = 0; i < snapshot.docs.length; i++) {
+        post.add(
+            Symptoms.fromJson(snapshot.docs[i].data(), snapshot.docs[i].id));
+      }
+      debugPrint('symptoms :: db => ${post.length}');
+      return post;
+    } catch (e, s) {
+      debugPrint("Exception/getSymptoms=========> $e, $s");
+      return [];
+    }
+  }
+
+  ////***************************************************************************** */
+  ////***************************************************************************** */
+  /// [[Chat messages are for both apps]]********************************* */
+  ////***************************************************************************** */
+  ////***************************************************************************** */
+
+  ///
+  /// Send message to database
+  sendMessage(Chat message) {
+    print('@sendMessage');
+    try {
+      firebaseDb
+          .child('messages')
+          .child('${message.pharmacistId}_${message.userId}')
+          .push()
+          .set(message.toJson())
+          .then((value) => print('Message sent successfull!!!'));
+    } catch (e) {
+      print('Exception @sendMessageFirebaseDb: $e');
+    }
+  }
+
+  ///
+  /// Get messages as stream
+  getMessagesStream(String stylistId, String customerId) {
+    print('@getMessagesStream');
+    Stream stream;
+    try {
+      stream = firebaseDb
+          .child('messages')
+          .child('${stylistId}_$customerId')
+          .onChildAdded;
+      return stream;
+    } catch (e) {
+      print('Exception @getMessagesStream: $e');
     }
   }
 }
