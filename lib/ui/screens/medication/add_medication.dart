@@ -252,7 +252,6 @@ class AddMedication extends StatelessWidget {
                                   // customRadio('Every Sunday', (value) {
                                   //   model.selectNewSchedule(2);
                                   // }, model.everySunday),
-
                                   SizedBox(height: 10.h)
                                 ],
                               ),
