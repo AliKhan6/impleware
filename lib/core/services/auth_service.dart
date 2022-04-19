@@ -1,5 +1,8 @@
 import 'package:calkitna_mobile_app/core/models/app_user.dart';
 import 'package:calkitna_mobile_app/core/models/custom_auth_result.dart';
+import 'package:calkitna_mobile_app/core/models/pharmacist.dart';
+import 'package:calkitna_mobile_app/core/services/locato_storage_service.dart';
+import 'package:calkitna_mobile_app/locator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'auth_exception_service.dart';
@@ -9,20 +12,26 @@ class AuthService extends ChangeNotifier {
   final _dbService = DatabaseService();
   final _auth = FirebaseAuth.instance;
   CustomAuthResult customAuthResult = CustomAuthResult();
+  final _localStorageService = locator<LocalStorageService>();
   User? user;
   bool isLogin = false;
   AppUser appUser = AppUser();
+  Pharmacist pharmacist = Pharmacist();
+  bool isUser = false;
+  bool isPharmacist = false;
 
-  AuthService() {
-    init();
-  }
   init() async {
-    // logout();
+    isUser = _localStorageService.accessUserAccessToken != null;
+    isPharmacist = _localStorageService.pharmacisAccessToken != null;
     user = _auth.currentUser;
     if (user != null) {
-      isLogin = true;
-
-      appUser = (await _dbService.getAppUser(user!.uid));
+      if (isUser) {
+        isLogin = true;
+        appUser = (await _dbService.getAppUser(user!.uid));
+      } else if (isPharmacist) {
+        isLogin = false;
+        pharmacist = (await _dbService.getPharmacist(user!.uid));
+      }
     } else {
       isLogin = false;
     }
@@ -48,7 +57,7 @@ class AuthService extends ChangeNotifier {
         customAuthResult.user = credentials.user;
         appUser.id = credentials.user!.uid;
         this.appUser = appUser;
-
+        _localStorageService.setAccessUserAccessToken = credentials.user!.uid;
         await _dbService.registerAppUser(appUser);
         notifyListeners();
       }
@@ -79,6 +88,35 @@ class AuthService extends ChangeNotifier {
         appUser = await _dbService.getAppUser(credentials.user!.uid);
         customAuthResult.status = true;
         customAuthResult.user = credentials.user;
+        _localStorageService.setAccessUserAccessToken = credentials.user!.uid;
+      }
+    } catch (e) {
+      customAuthResult.status = false;
+      customAuthResult.errorMessage =
+          AuthExceptionsService.generateExceptionMessage(e);
+    }
+    return customAuthResult;
+  }
+
+  /// [Login] with email and password function
+  ///
+  Future<CustomAuthResult> loginPharWithEmailPassword({email, password}) async {
+    try {
+      final credentials = await _auth.signInWithEmailAndPassword(
+          email: email, password: password);
+      if (credentials.user == null) {
+        customAuthResult.status = false;
+        customAuthResult.errorMessage = 'An undefined Error happened.';
+      }
+
+      ///
+      /// If firebase auth is successful:
+      ///
+      if (credentials.user != null) {
+        pharmacist = await _dbService.getPharmacist(credentials.user!.uid);
+        customAuthResult.status = true;
+        customAuthResult.user = credentials.user;
+        _localStorageService.setPharmacisAccessToken = credentials.user!.uid;
       }
     } catch (e) {
       customAuthResult.status = false;

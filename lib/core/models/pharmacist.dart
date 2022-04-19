@@ -4,6 +4,8 @@ class Pharmacist {
   String? name;
   String? username;
   String? imageUrl;
+  String? password;
+
 
   Pharmacist({
     this.id,
@@ -11,6 +13,7 @@ class Pharmacist {
     this.name,
     this.username,
     this.imageUrl,
+    this.password,
   });
 
   Map<String, dynamic> toJson() {
