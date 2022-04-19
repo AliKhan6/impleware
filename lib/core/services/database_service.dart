@@ -2,6 +2,7 @@ import 'package:calkitna_mobile_app/core/models/allergy.dart';
 import 'package:calkitna_mobile_app/core/models/app_user.dart';
 import 'package:calkitna_mobile_app/core/models/medicine.dart';
 import 'package:calkitna_mobile_app/core/models/pharmacist.dart';
+import 'package:calkitna_mobile_app/core/models/symptom_checker.dart';
 import 'package:calkitna_mobile_app/core/models/symptoms.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
@@ -178,6 +179,62 @@ class DatabaseService {
       return post;
     } catch (e, s) {
       debugPrint("Exception/getSymptoms=========> $e, $s");
+      return [];
+    }
+  }
+
+  /// Register app user
+  addMySymptoms(String id, SymptomChecker medicine) async {
+    debugPrint("User @Id => $id");
+    try {
+      await _db
+          .collection('app_user')
+          .doc(id)
+          .collection('symptoms')
+          .add(medicine.toJson())
+          .then((value) => debugPrint('symptoms added successfully'));
+    } catch (e, s) {
+      debugPrint('Exception @DatabaseService/addMedicine');
+      debugPrint(s.toString());
+      return false;
+    }
+  }
+
+  /// Register app user
+  updateMySymptoms(String id, SymptomChecker medicine) async {
+    debugPrint("User @Id => $id");
+    try {
+      await _db
+          .collection('app_user')
+          .doc(id)
+          .collection('symptoms')
+          .doc(medicine.id)
+          .update(medicine.toJson())
+          .then((value) => debugPrint('symptoms updated successfully'));
+    } catch (e, s) {
+      debugPrint('Exception @DatabaseService/updateSymptoms');
+      debugPrint(s.toString());
+      return false;
+    }
+  }
+
+  Future<List<SymptomChecker>> getMySymptoms(String id) async {
+    debugPrint("getAllSymptoms/");
+    try {
+      List<SymptomChecker> post = [];
+      QuerySnapshot snapshot =
+          await _db.collection('app_user').doc(id).collection('symptoms').get();
+      if (snapshot.docs.isEmpty) {
+        debugPrint('No symptoms found in db');
+      }
+      for (int i = 0; i < snapshot.docs.length; i++) {
+        post.add(SymptomChecker.fromJson(
+            snapshot.docs[i].data(), snapshot.docs[i].id));
+      }
+      debugPrint('symptoms :: db => ${post.length}');
+      return post;
+    } catch (e, s) {
+      debugPrint("Exception/getMySymptoms=========> $e, $s");
       return [];
     }
   }
