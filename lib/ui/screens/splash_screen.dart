@@ -5,6 +5,7 @@ import 'package:calkitna_mobile_app/core/services/auth_service.dart';
 import 'package:calkitna_mobile_app/core/services/locato_storage_service.dart';
 import 'package:calkitna_mobile_app/core/services/notification_service.dart';
 import 'package:calkitna_mobile_app/ui/custom_widgets/image_container.dart';
+import 'package:calkitna_mobile_app/ui/pharmacist/home/phar_home_screen.dart';
 import 'package:calkitna_mobile_app/ui/screens/auth_screens/login/login_screen.dart';
 import 'package:calkitna_mobile_app/ui/screens/home/home_screen.dart';
 import 'package:flutter/material.dart';
@@ -25,8 +26,8 @@ class _SplashScreenState extends State<SplashScreen> {
   final _notificationService = locator<NotificationsService>();
 
   init() async {
-    await _notificationService.init();
     await _localStorateService.init();
+    await _notificationService.init();
     await Future.delayed(const Duration(milliseconds: 600));
     await _authService.init();
 
@@ -44,6 +45,8 @@ class _SplashScreenState extends State<SplashScreen> {
     if (_authService.isLogin) {
       _localStorateService.setOnBoardingPageCount = 4;
       Get.off(() => const HomeScreen());
+    } else if (_authService.isPharmacist) {
+      Get.off(() => const PharHomeScreen());
     } else {
       Get.off(() => const LoginScreen());
     }

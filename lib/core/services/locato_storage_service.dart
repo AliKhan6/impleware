@@ -1,19 +1,20 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LocalStorageService {
-  static LocalStorageService? _instance;
   static SharedPreferences? _preferences;
 
-  LocalStorageService() {
-    init();
-  }
+  // LocalStorageService() {
+  //   init();
+  // }
 
   ///
   /// List of const keys
   ///
   static const String onboardingCountKey = 'onBoardingCount';
   static const String notificationsCountKey = 'notificationsCount';
+  static const String userAccessToken = 'userAccessToken';
+  static const String pharmacistAccessToken = 'pharmacistAccessToken';
 
   ///
   /// Setters and getters
@@ -26,10 +27,22 @@ class LocalStorageService {
   set setNotificationsCount(int count) =>
       _saveToDisk(notificationsCountKey, count);
 
+  dynamic get accessUserAccessToken => _getFromDisk(userAccessToken);
+  set setAccessUserAccessToken(String? token) =>
+      _saveToDisk(userAccessToken, token);
+
+  ///
+  /// Setters and getters for Pharmacis accessToken
+  ///
+  dynamic get pharmacisAccessToken => _getFromDisk(pharmacistAccessToken);
+  set setPharmacisAccessToken(String? token) =>
+      _saveToDisk(pharmacistAccessToken, token);
+
 ////
   ///initializing instance
   ///
   init() async {
+    print('localStorageINIT');
     _preferences = await SharedPreferences.getInstance();
   }
 

@@ -52,9 +52,45 @@ class DatabaseService {
     }
   }
 
+  /// Get User from database using this funciton
+  Future<Pharmacist> getPharmacist(id) async {
+    //Todo: Rename getUsers -> getUser
+    debugPrint('@getPharmacist: id: $id');
+    try {
+      final snapshot = await _db.collection('pharmacists').doc(id).get();
+      debugPrint('Pharmacist Data: ${snapshot.data()}');
+      return Pharmacist.fromJson(snapshot.data()!, snapshot.id);
+    } catch (e, s) {
+      debugPrint('Exception @DatabaseService/getPharmacist');
+      debugPrint(s.toString());
+      return Pharmacist();
+    }
+  }
+
   updateClientFcm(token, id) async {
     await _db.collection("app_user").doc(id).update({'fcmToken': token}).then(
         (value) => debugPrint('fcm updated successfully'));
+  }
+
+  Future<List<AppUser>> getAppUsers() async {
+    debugPrint("getAppUsers/");
+    try {
+      List<AppUser> post = [];
+      QuerySnapshot snapshot = await _db.collection('app_user').get();
+      if (snapshot.docs.isEmpty) {
+        debugPrint('No users found in db');
+      }
+      for (int i = 0; i < snapshot.docs.length; i++) {
+        post.add(
+            AppUser.fromJson(snapshot.docs[i].data(), snapshot.docs[i].id));
+      }
+      debugPrint('users :: db => ${post.length}');
+
+      return post;
+    } catch (e, s) {
+      debugPrint("Exception/gettingUsers=========> $e, $s");
+      return [];
+    }
   }
 
   Future<List<Allergy>> getAllergies() async {

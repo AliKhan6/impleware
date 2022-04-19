@@ -6,24 +6,24 @@ import 'package:calkitna_mobile_app/core/others/screen_utils.dart';
 import 'package:calkitna_mobile_app/ui/custom_widgets/custom_button.dart';
 import 'package:calkitna_mobile_app/ui/custom_widgets/custom_text_field.dart';
 import 'package:calkitna_mobile_app/ui/custom_widgets/social_auth_button.dart';
-import 'package:calkitna_mobile_app/ui/pharmacist/login/phar_login_screen.dart';
+import 'package:calkitna_mobile_app/ui/pharmacist/login/phar_login_view_model.dart';
+import 'package:calkitna_mobile_app/ui/screens/auth_screens/login/login_screen.dart';
 import 'package:calkitna_mobile_app/ui/screens/auth_screens/login/login_view_model.dart';
-import 'package:calkitna_mobile_app/ui/screens/auth_screens/signup/signup_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:provider/provider.dart';
 import 'dart:io' show Platform;
 
-class LoginScreen extends StatelessWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+class PharLoginScreen extends StatelessWidget {
+  const PharLoginScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final _formKey = GlobalKey<FormState>();
     return ChangeNotifierProvider(
-      create: (context) => LoginViewModel(),
-      child: Consumer<LoginViewModel>(
+      create: (context) => PharLoginViewModel(),
+      child: Consumer<PharLoginViewModel>(
         builder: (context, model, child) {
           return ModalProgressHUD(
             inAsyncCall: model.state == ViewState.busy,
@@ -80,41 +80,14 @@ class LoginScreen extends StatelessWidget {
                                 //       style: bodyTextStyleAssistant.copyWith(
                                 //           fontSize: 14.sp, color: const Color(0xFF707070))),
                                 // ),
-                                SizedBox(height: 29.h),
-                                GestureDetector(
-                                  onTap: () =>
-                                      Get.to(() => const SignUpScreen()),
-                                  child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          "If you don't have an account, try",
-                                          style:
-                                              bodyTextStyleAssistant.copyWith(
-                                                  fontSize: 14.sp,
-                                                  color:
-                                                      const Color(0xFF707070)),
-                                        ),
-                                        SizedBox(width: 7.w),
-                                        Text('Signing Up here.',
-                                            style:
-                                                bodyTextStyleAssistant.copyWith(
-                                                    color:
-                                                        const Color(0xFF756DB8),
-                                                    fontSize: 14.sp,
-                                                    decoration: TextDecoration
-                                                        .underline))
-                                      ]),
-                                ),
 
-                                /// 
-                                /// 
-                                /// 
+                                ///
+                                ///
+                                ///
                                 SizedBox(height: 29.h),
                                 GestureDetector(
                                   onTap: () =>
-                                      Get.to(() => const PharLoginScreen()),
+                                      Get.to(() => const LoginScreen()),
                                   child: Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
@@ -128,7 +101,7 @@ class LoginScreen extends StatelessWidget {
                                                       const Color(0xFF707070)),
                                         ),
                                         SizedBox(width: 7.w),
-                                        Text('Pharmacist',
+                                        Text('User',
                                             style:
                                                 bodyTextStyleAssistant.copyWith(
                                                     color:
@@ -156,7 +129,7 @@ class LoginScreen extends StatelessWidget {
     );
   }
 
-  textFields(LoginViewModel model) {
+  textFields(PharLoginViewModel model) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       /// email text field
       Text(
