@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 import '../../../core/others/screen_utils.dart';
 import '../../custom_widgets/custom_screen.dart';
 import '../../custom_widgets/image_container.dart';
+import '../../screens/medical_record/medical_record_screen.dart';
 
 class UserDetailScreen extends StatelessWidget {
   final AppUser appUser;
@@ -41,22 +42,28 @@ class UserDetailScreen extends StatelessWidget {
                         return Padding(
                           padding: const EdgeInsets.only(left: 4.0, right: 4),
                           child: GestureDetector(
-                            onTap: index == 3
+                            onTap: index == 0
                                 ? () {
                                     Get.to(() =>
-                                        PharChatScreen(stylistUser: appUser));
+                                        MedicalRecordScreen(appUser: appUser));
                                   }
-                                : index == 2
+                                : index == 3
                                     ? () {
-                                        Get.to(
-                                            () => UserConditionScreen(appUser));
+                                        Get.to(() => PharChatScreen(
+                                            stylistUser: appUser));
                                       }
-                                    : index == 4
+                                    : index == 2
                                         ? () {
                                             Get.to(() =>
-                                                MedicineImagesScreen(appUser));
+                                                UserConditionScreen(appUser));
                                           }
-                                        : model.homeData[index].onTap,
+                                        : index == 4
+                                            ? () {
+                                                Get.to(() =>
+                                                    MedicineImagesScreen(
+                                                        appUser));
+                                              }
+                                            : model.homeData[index].onTap,
                             child: Container(
                               height: 120.h,
                               decoration: BoxDecoration(

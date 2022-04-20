@@ -16,7 +16,7 @@ class UserDetailViewModel extends BaseViewModel {
         image: '$staticAsset/medical_record.png',
         title: 'Medical Record',
         onTap: () {
-          Get.to(() => const MedicalRecordScreen());
+         
         }),
     HomeData(
         image: '$staticAsset/my_profile.png',

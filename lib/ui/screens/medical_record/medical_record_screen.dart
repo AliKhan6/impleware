@@ -1,3 +1,4 @@
+import 'package:calkitna_mobile_app/core/models/app_user.dart';
 import 'package:calkitna_mobile_app/ui/custom_widgets/custom_app_bar.dart';
 import 'package:calkitna_mobile_app/ui/screens/medical_record/medical_record_view_model.dart';
 import 'package:flutter/material.dart';
@@ -7,9 +8,11 @@ import 'package:provider/provider.dart';
 
 import '../../../core/constants/style.dart';
 import '../../custom_widgets/image_container.dart';
+import 'documents/documents_screen.dart';
 
 class MedicalRecordScreen extends StatelessWidget {
-  const MedicalRecordScreen({Key? key}) : super(key: key);
+  final AppUser? appUser;
+  const MedicalRecordScreen({Key? key, this.appUser}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +47,12 @@ class MedicalRecordScreen extends StatelessWidget {
                           return Padding(
                             padding: const EdgeInsets.only(left: 4.0, right: 4),
                             child: GestureDetector(
-                              onTap: model.records[index].onTap,
+                              onTap: appUser != null
+                                  ? () {
+                                      Get.to(() =>
+                                          DocuemntScreen(appUser: appUser));
+                                    }
+                                  : model.records[index].onTap,
                               child: Container(
                                 height: 120.h,
                                 decoration: BoxDecoration(

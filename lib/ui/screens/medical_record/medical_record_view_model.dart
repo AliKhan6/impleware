@@ -5,6 +5,8 @@ import 'package:calkitna_mobile_app/ui/screens/medical_record/measurements/measu
 import 'package:calkitna_mobile_app/ui/screens/medical_record/patient_record/patient_record_screen.dart';
 import 'package:get/get.dart';
 
+import 'documents/documents_screen.dart';
+
 class MedicalRecordViewModel extends BaseViewModel {
   List<Record> records = [
     Record(
@@ -27,7 +29,9 @@ class MedicalRecordViewModel extends BaseViewModel {
         image: '$staticAsset/icon.png'),
     Record(
         title: 'Documents & reports',
-        onTap: () {},
+        onTap: () {
+          Get.to(() => const DocuemntScreen());
+        },
         image: '$staticAsset/icon.png'),
   ];
 }

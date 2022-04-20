@@ -1,12 +1,14 @@
 import 'package:calkitna_mobile_app/core/constants/colors.dart';
 import 'package:calkitna_mobile_app/core/constants/strings.dart';
 import 'package:calkitna_mobile_app/core/constants/style.dart';
+import 'package:calkitna_mobile_app/core/enums/view_state.dart';
 import 'package:calkitna_mobile_app/ui/custom_widgets/custom_app_bar.dart';
 import 'package:calkitna_mobile_app/ui/custom_widgets/custom_button.dart';
 import 'package:calkitna_mobile_app/ui/custom_widgets/custom_text_field.dart';
 import 'package:calkitna_mobile_app/ui/pharmacist/profile/phar_profile_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:provider/provider.dart';
 
 class PharProfileScreen extends StatelessWidget {
@@ -18,52 +20,63 @@ class PharProfileScreen extends StatelessWidget {
       create: (context) => PharProfileViewModel(),
       child: Consumer<PharProfileViewModel>(
         builder: (context, model, child) {
-          return Scaffold(
-            body: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: Column(children: [
-                  SizedBox(height: 70.h),
-                  customAppBar('Profile'),
-                  SizedBox(height: 30.h),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 12),
-                    child: Column(children: [
-                      model.authService.pharmacist.imageUrl == null
-                          ? CircleAvatar(
-                              backgroundImage:
-                                  const AssetImage('$staticAsset/profile.jpg'),
-                              radius: 48.r)
-                          : CircleAvatar(
-                              backgroundImage: NetworkImage(
-                                  model.authService.pharmacist.imageUrl!),
-                              radius: 48.r),
-                      SizedBox(height: 5.h),
-                      TextButton(
-                          onPressed: () {},
-                          child: Text(
-                            'Change Profile',
-                            style: bodyTextStyleRoboto.copyWith(
-                                fontSize: 17.sp,
-                                color: blueColor,
-                                decoration: TextDecoration.underline),
-                          )),
-                      SizedBox(height: 20.h),
+          return ModalProgressHUD(
+            inAsyncCall: model.state == ViewState.busy,
+            child: Scaffold(
+              body: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: Column(children: [
+                    SizedBox(height: 70.h),
+                    customAppBar('Profile'),
+                    SizedBox(height: 30.h),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                      child: Column(children: [
+                        model.image == null
+                            ? model.authService.pharmacist.imageUrl == null
+                                ? CircleAvatar(
+                                    backgroundImage: const AssetImage(
+                                        '$staticAsset/profile.jpg'),
+                                    radius: 48.r)
+                                : CircleAvatar(
+                                    backgroundImage: NetworkImage(
+                                        model.authService.pharmacist.imageUrl!),
+                                    radius: 48.r)
+                            : CircleAvatar(
+                                backgroundImage: FileImage(model.image!),
+                                radius: 48.r),
+                        SizedBox(height: 5.h),
+                        TextButton(
+                            onPressed: () {
+                              model.getImage();
+                            },
+                            child: Text(
+                              'Change Profile',
+                              style: bodyTextStyleRoboto.copyWith(
+                                  fontSize: 17.sp,
+                                  color: blueColor,
+                                  decoration: TextDecoration.underline),
+                            )),
+                        SizedBox(height: 20.h),
 
-                      ///
-                      /// textFields
-                      ///
-                      textFields(model),
-                      SizedBox(height: 30.h),
-                      CustomButton(
-                        buttonColor: primaryColor,
-                        text: 'SAVE CHANGES',
-                        textColor: Colors.black,
-                        onTap: () {},
-                      )
-                    ]),
-                  ),
-                ]),
+                        ///
+                        /// textFields
+                        ///
+                        textFields(model),
+                        SizedBox(height: 30.h),
+                        CustomButton(
+                          buttonColor: primaryColor,
+                          text: 'SAVE CHANGES',
+                          textColor: Colors.black,
+                          onTap: () {
+                            model.saveData();
+                          },
+                        )
+                      ]),
+                    ),
+                  ]),
+                ),
               ),
             ),
           );
@@ -84,7 +97,7 @@ class PharProfileScreen extends StatelessWidget {
         initialValue: model.authService.pharmacist.name,
         fillColor: const Color(0xFFEBEBEB),
         onChange: (value) {
-          model.authService.pharmacist.name = value;
+          model.pharmacist.name = value;
         },
         inputType: TextInputType.emailAddress,
         disableBorder: true,
@@ -101,7 +114,7 @@ class PharProfileScreen extends StatelessWidget {
         initialValue: model.authService.pharmacist.username,
         fillColor: const Color(0xFFEBEBEB),
         onChange: (value) {
-          model.authService.pharmacist.username = value;
+          model.pharmacist.username = value;
         },
         inputType: TextInputType.emailAddress,
         disableBorder: true,
