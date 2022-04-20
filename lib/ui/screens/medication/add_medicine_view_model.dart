@@ -9,7 +9,6 @@ import 'package:calkitna_mobile_app/core/view_models.dart/base_view_model.dart';
 import 'package:calkitna_mobile_app/locator.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import '../../../core/enums/view_state.dart';
 
 class AddMedicineViewModel extends BaseViewModel {
@@ -25,8 +24,14 @@ class AddMedicineViewModel extends BaseViewModel {
       FirebaseStorageService();
   final _dbService = DatabaseService();
   final _authService = locator<AuthService>();
-
   Medicine medicine = Medicine();
+
+  AddMedicineViewModel({Medicine? medicine}) {
+    if (medicine != null) {
+      this.medicine = medicine;
+      everyday = 1;
+    }
+  }
 
   getImageUrl() async {
     medicine.imageUrl =
@@ -48,8 +53,27 @@ class AddMedicineViewModel extends BaseViewModel {
     setState(ViewState.idle);
   }
 
+  update(List<Medicine> list) async {
+    setState(ViewState.busy);
+    if (image != null) {
+      await getImageUrl();
+    }
+    medicine.createdAt = DateTime.now();
+    debugPrint('medicine => ${medicine.toJson()}');
+    await _dbService.updateMedicine(_authService.appUser.id!, medicine);
+    for (int i = 0; i < list.length; i++) {
+      if (list[i].id == medicine.id) {
+        list[i] = medicine;
+      }
+    }
+    Get.back(result: list);
+    Get.snackbar('Update success', 'Medicine has been updated successfully');
+    setState(ViewState.idle);
+  }
+
   getImage() async {
     setState(ViewState.busy);
+    medicine.imageUrl = null;
     image = await _filePickerService.pickImageWithoutCompression();
     if (image != null) {
       debugPrint('image taken');

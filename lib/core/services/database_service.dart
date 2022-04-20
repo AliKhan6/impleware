@@ -1,6 +1,7 @@
 import 'package:calkitna_mobile_app/core/models/allergy.dart';
 import 'package:calkitna_mobile_app/core/models/app_user.dart';
 import 'package:calkitna_mobile_app/core/models/medicine.dart';
+import 'package:calkitna_mobile_app/core/models/medicine_images.dart';
 import 'package:calkitna_mobile_app/core/models/pharmacist.dart';
 import 'package:calkitna_mobile_app/core/models/symptom_checker.dart';
 import 'package:calkitna_mobile_app/core/models/symptoms.dart';
@@ -132,6 +133,50 @@ class DatabaseService {
   }
 
   /// Register app user
+  addMedicineImages(String id, String medicine) async {
+    DateTime now = DateTime.now();
+    debugPrint("User @Id => $id");
+    try {
+      await _db
+          .collection('app_user')
+          .doc(id)
+          .collection('medicine-images')
+          .add({'imageUrl': medicine, 'createdAt': now}).then(
+              (value) => debugPrint('medicine image added successfully'));
+    } catch (e, s) {
+      debugPrint('Exception @DatabaseService/addMedicine');
+      debugPrint(s.toString());
+      return false;
+    }
+  }
+
+  Future<List<MedicineImages>> getMedicineImages(String id) async {
+    debugPrint("getMedicineImages/");
+    try {
+      List<MedicineImages> post = [];
+      QuerySnapshot snapshot = await _db
+          .collection('app_user')
+          .doc(id)
+          .collection('medicine-images')
+          .orderBy('createdAt', descending: true)
+          .get();
+      if (snapshot.docs.isEmpty) {
+        debugPrint('No allergies found in db');
+      }
+      for (int i = 0; i < snapshot.docs.length; i++) {
+        post.add(MedicineImages.fromJson(
+            snapshot.docs[i].data(), snapshot.docs[i].id));
+      }
+      debugPrint('Allergies :: db => ${post.length}');
+
+      return post;
+    } catch (e, s) {
+      debugPrint("Exception/getAllergies=========> $e, $s");
+      return [];
+    }
+  }
+
+  /// Register app user
   updateMedicine(String id, Medicine medicine) async {
     debugPrint("User @Id => $id");
     try {
@@ -142,6 +187,24 @@ class DatabaseService {
           .doc(medicine.id)
           .update(medicine.toJson())
           .then((value) => debugPrint('medicines added successfully'));
+    } catch (e, s) {
+      debugPrint('Exception @DatabaseService/addMedicine');
+      debugPrint(s.toString());
+      return false;
+    }
+  }
+
+  /// Register app user
+  deleteMedicine(String id, Medicine medicine) async {
+    debugPrint("User @Id => $id");
+    try {
+      await _db
+          .collection('app_user')
+          .doc(id)
+          .collection('medicines')
+          .doc(medicine.id)
+          .delete()
+          .then((value) => debugPrint('medicines deleted successfully'));
     } catch (e, s) {
       debugPrint('Exception @DatabaseService/addMedicine');
       debugPrint(s.toString());

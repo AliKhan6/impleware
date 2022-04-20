@@ -1,31 +1,31 @@
-import 'package:calkitna_mobile_app/core/models/pharmacist.dart';
+import 'package:calkitna_mobile_app/core/models/app_user.dart';
 import 'package:calkitna_mobile_app/ui/custom_widgets/custom_app_bar.dart';
+import 'package:calkitna_mobile_app/ui/pharmacist/chat/phar_chat_view_model.dart';
 import 'package:calkitna_mobile_app/ui/screens/chat/right_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
-import 'chat_view_model.dart';
 
-class ChatScreen extends StatefulWidget {
-  final Pharmacist stylistUser;
-  ChatScreen(this.stylistUser);
+class PharChatScreen extends StatefulWidget {
+  final AppUser? stylistUser;
+  const PharChatScreen({this.stylistUser});
 
   @override
   _CustomerConversationScreenState createState() =>
       _CustomerConversationScreenState();
 }
 
-class _CustomerConversationScreenState extends State<ChatScreen> {
+class _CustomerConversationScreenState extends State<PharChatScreen> {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (context) => ChatViewModel(widget.stylistUser.id!),
-      child: Consumer<ChatViewModel>(builder: (context, model, child) {
+      create: (context) => PharChatViewModel(widget.stylistUser!.id!),
+      child: Consumer<PharChatViewModel>(builder: (context, model, child) {
         return Scaffold(
             body: Column(
           children: <Widget>[
             SizedBox(height: 70.h),
-            customAppBar('${widget.stylistUser.name}'),
+            customAppBar(widget.stylistUser!.name ?? ''),
             chatMessages(model),
             sendMessageContainer(model), // The input widget
           ],
@@ -34,7 +34,7 @@ class _CustomerConversationScreenState extends State<ChatScreen> {
     );
   }
 
-  sendMessageContainer(ChatViewModel model) {
+  sendMessageContainer(PharChatViewModel model) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 15.w),
       child: Row(
@@ -60,7 +60,7 @@ class _CustomerConversationScreenState extends State<ChatScreen> {
               icon: const Icon(Icons.send),
               onPressed: () {
                 if (model.controller.text.isNotEmpty) {
-                  model.sendMessage(widget.stylistUser);
+                  model.sendMessage(widget.stylistUser!);
                 }
               },
             ),
@@ -76,7 +76,7 @@ class _CustomerConversationScreenState extends State<ChatScreen> {
     );
   }
 
-  chatMessages(ChatViewModel model) {
+  chatMessages(PharChatViewModel model) {
     return Expanded(
       child: ListView.builder(
         physics: const BouncingScrollPhysics(),
@@ -86,7 +86,8 @@ class _CustomerConversationScreenState extends State<ChatScreen> {
         shrinkWrap: true,
         itemBuilder: (context, index) {
           bool isMe = 
-              model.reverseMessagesList[index].isUser == true;
+              model.reverseMessagesList[index].isPharmacist == true;
+          debugPrint('isMe: $isMe');
           return isMe
               ? MessengerTextRight(message: model.reverseMessagesList[index])
               : MessengerTextLeft(message: model.reverseMessagesList[index]);
