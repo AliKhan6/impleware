@@ -35,132 +35,147 @@ class PillReminderScreen extends StatelessWidget {
                   ///
                   /// lower body
                   ///
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                    child: Column(
-                      children: [
-                        ///
-                        /// search field
-                        ///
-                        searchField(model),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                      child: Column(
+                        children: [
+                          ///
+                          /// search field
+                          ///
+                          searchField(model),
 
-                        ///
-                        /// list of medicines
-                        ///
-                        ListView.builder(
-                            physics: const BouncingScrollPhysics(),
-                            shrinkWrap: true,
-                            itemCount: model.medicines.length,
-                            itemBuilder: (context, index) {
-                              return Padding(
-                                padding: const EdgeInsets.only(bottom: 10.0),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(8),
-                                    color: Colors.white,
-                                    boxShadow: [
-                                      BoxShadow(
-                                          color: Colors.grey.withOpacity(0.2),
-                                          blurRadius: 3,
-                                          spreadRadius: 1),
-                                    ],
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(12),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
+                          ///
+                          /// list of medicines
+                          ///
+                          Expanded(
+                            child: ListView.builder(
+                                physics: const BouncingScrollPhysics(),
+                                shrinkWrap: true,
+                                itemCount: model.medicines.length,
+                                itemBuilder: (context, index) {
+                                  return Padding(
+                                    padding:
+                                        const EdgeInsets.only(bottom: 10.0),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(8),
+                                        color: Colors.white,
+                                        boxShadow: [
+                                          BoxShadow(
+                                              color:
+                                                  Colors.grey.withOpacity(0.2),
+                                              blurRadius: 3,
+                                              spreadRadius: 1),
+                                        ],
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(12),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Row(
+                                                  children: [
+                                                    ImageContainer(
+                                                        assetImage:
+                                                            '$staticAsset/capsule.png',
+                                                        height: 30.h,
+                                                        width: 20.w),
+                                                    SizedBox(width: 10.w),
+                                                    Text(
+                                                        '${model.medicines[index].name}',
+                                                        style:
+                                                            subHeadingTextStyleRoboto),
+                                                  ],
+                                                ),
+                                                Switch(
+                                                    activeColor: primaryColor,
+                                                    value: model
+                                                            .medicines[index]
+                                                            .isReminderOpen ??
+                                                        false,
+                                                    onChanged: (value) {
+                                                      model.setReminder(index);
+                                                    })
+                                              ],
+                                            ),
+                                            SizedBox(height: 15.h),
+                                            Text(
+                                                'Reminder Time (${model.medicines[index].noTimes})',
+                                                style: subHeadingTextStyleRoboto
+                                                    .copyWith(
+                                                        color: primaryColor)),
+                                            SizedBox(height: 10.h),
+                                            Row(
+                                              children: [
+                                                const Icon(Icons.repeat,
+                                                    size: 18),
+                                                SizedBox(width: 10.w),
+                                                Text(
+                                                    '${model.medicines[index].time1}',
+                                                    style: bodyTextStyleRoboto),
+                                                SizedBox(width: 10.w),
+                                                Container(
+                                                    height: 15.h,
+                                                    color: primaryColor,
+                                                    width: 1.w),
+                                                SizedBox(width: 10.w),
+                                                model.medicines[index].time2 !=
+                                                        null
+                                                    ? Text(
+                                                        '${model.medicines[index].time2}',
+                                                        style:
+                                                            bodyTextStyleRoboto)
+                                                    : Container(),
+                                                SizedBox(width: 10.w),
+                                                model.medicines[index].time3 !=
+                                                        null
+                                                    ? Text(
+                                                        '${model.medicines[index].time3}',
+                                                        style:
+                                                            bodyTextStyleRoboto)
+                                                    : Container(),
+                                              ],
+                                            ),
+                                            SizedBox(height: 30.h),
+                                            Text('Schedule',
+                                                style: subHeadingTextStyleRoboto
+                                                    .copyWith(
+                                                        color: primaryColor)),
+                                            SizedBox(height: 10.h),
+
+                                            ///
+                                            /// schedule
                                             Row(
                                               children: [
                                                 ImageContainer(
                                                     assetImage:
-                                                        '$staticAsset/capsule.png',
-                                                    height: 30.h,
+                                                        '$staticAsset/calendar.png',
+                                                    height: 20.h,
                                                     width: 20.w),
                                                 SizedBox(width: 10.w),
                                                 Text(
-                                                    '${model.medicines[index].name}',
-                                                    style:
-                                                        subHeadingTextStyleRoboto),
+                                                    '${model.medicines[index].schedule}',
+                                                    style: bodyTextStyleRoboto),
                                               ],
                                             ),
-                                            Switch(
-                                                activeColor: primaryColor,
-                                                value: model.medicines[index]
-                                                        .isReminderOpen ??
-                                                    false,
-                                                onChanged: (value) {
-                                                  model.setReminder(index);
-                                                })
+                                            SizedBox(height: 10.h),
                                           ],
                                         ),
-                                        SizedBox(height: 15.h),
-                                        Text(
-                                            'Reminder Time (${model.medicines[index].noTimes})',
-                                            style: subHeadingTextStyleRoboto
-                                                .copyWith(color: primaryColor)),
-                                        SizedBox(height: 10.h),
-                                        Row(
-                                          children: [
-                                            const Icon(Icons.repeat, size: 18),
-                                            SizedBox(width: 10.w),
-                                            Text(
-                                                '${model.medicines[index].time1}',
-                                                style: bodyTextStyleRoboto),
-                                            SizedBox(width: 10.w),
-                                            Container(
-                                                height: 15.h,
-                                                color: primaryColor,
-                                                width: 1.w),
-                                            SizedBox(width: 10.w),
-                                            model.medicines[index].time2 != null
-                                                ? Text(
-                                                    '${model.medicines[index].time2}',
-                                                    style: bodyTextStyleRoboto)
-                                                : Container(),
-                                            SizedBox(width: 10.w),
-                                            model.medicines[index].time3 != null
-                                                ? Text(
-                                                    '${model.medicines[index].time3}',
-                                                    style: bodyTextStyleRoboto)
-                                                : Container(),
-                                          ],
-                                        ),
-                                        SizedBox(height: 30.h),
-                                        Text('Schedule',
-                                            style: subHeadingTextStyleRoboto
-                                                .copyWith(color: primaryColor)),
-                                        SizedBox(height: 10.h),
-
-                                        ///
-                                        /// schedule
-                                        Row(
-                                          children: [
-                                            ImageContainer(
-                                                assetImage:
-                                                    '$staticAsset/calendar.png',
-                                                height: 20.h,
-                                                width: 20.w),
-                                            SizedBox(width: 10.w),
-                                            Text(
-                                                '${model.medicines[index].schedule}',
-                                                style: bodyTextStyleRoboto),
-                                          ],
-                                        ),
-                                        SizedBox(height: 10.h),
-                                      ],
+                                      ),
                                     ),
-                                  ),
-                                ),
-                              );
-                            }),
-                        SizedBox(height: 30.h)
-                      ],
+                                  );
+                                }),
+                          ),
+                          SizedBox(height: 30.h)
+                        ],
+                      ),
                     ),
                   )
                 ]),

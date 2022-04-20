@@ -36,9 +36,7 @@ class MessengerTextRight extends StatelessWidget {
                     child: Column(
                       children: [
                         Text(message!.message ?? '',
-                            style: const TextStyle(
-                                
-                                color: Colors.white)),
+                            style: const TextStyle(color: Colors.white)),
                       ],
                     ),
                   ),
@@ -47,7 +45,8 @@ class MessengerTextRight extends StatelessWidget {
             ],
           ),
           Padding(
-            padding: const EdgeInsetsDirectional.only(start: 60, end: 7, top: 5),
+            padding:
+                const EdgeInsetsDirectional.only(start: 60, end: 7, top: 5),
             child: Text(
               message!.formattedTime ?? ' ',
               style: const TextStyle(
@@ -79,7 +78,7 @@ class MessengerTextLeft extends StatelessWidget {
               Flexible(
                 flex: 3,
                 child: Material(
-                  color: Colors.white,
+                  color: Colors.grey.withOpacity(0.2),
                   borderRadius: const BorderRadius.only(
                     topRight: Radius.circular(20.0),
                     bottomLeft: Radius.circular(20.0),
@@ -89,9 +88,7 @@ class MessengerTextLeft extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(
                         vertical: 10, horizontal: 20),
                     child: Text(message!.message ?? '',
-                        style: const TextStyle(
-                            
-                            color: Colors.black)),
+                        style: const TextStyle(color: Colors.black)),
                   ),
                 ),
               ),

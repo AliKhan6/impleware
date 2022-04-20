@@ -13,6 +13,8 @@ class Chat {
   String? message;
   String? formattedTime;
   MessageType? type;
+  bool? isPharmacist;
+  bool? isUser;
 
   Chat({
     this.id,
@@ -26,6 +28,8 @@ class Chat {
     this.message,
     this.formattedTime,
     this.type = MessageType.text,
+    this.isPharmacist,
+    this.isUser,
   });
 
   Chat.fromJson(json) {
@@ -39,6 +43,8 @@ class Chat {
     userUrl = json['userUrl'];
     pharmacistUrl = json['pharmacistUrl'];
     type = _getMessageType(json['type']);
+    isPharmacist = json['isPharmacist'];
+    isUser = json['isUser'];
   }
 
   toJson() {
@@ -53,6 +59,8 @@ class Chat {
     data['userUrl'] = userUrl;
     data['pharmacistUrl'] = pharmacistUrl;
     data['formattedTime'] = formattedTime;
+    data['isPharmacist'] = isPharmacist;
+    data['isUser'] = isUser;
     return data;
   }
 

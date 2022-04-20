@@ -1,27 +1,25 @@
 import 'dart:io';
-
-import 'package:calkitna_mobile_app/core/models/app_user.dart';
-import 'package:calkitna_mobile_app/core/services/auth_service.dart';
-import 'package:calkitna_mobile_app/core/services/database_service.dart';
+import 'package:calkitna_mobile_app/core/models/pharmacist.dart';
 import 'package:calkitna_mobile_app/core/view_models.dart/base_view_model.dart';
-import 'package:calkitna_mobile_app/locator.dart';
 import 'package:flutter/material.dart';
-
 import '../../../core/enums/view_state.dart';
+import '../../../core/services/auth_service.dart';
+import '../../../core/services/database_service.dart';
 import '../../../core/services/file_picker_service.dart';
 import '../../../core/services/firebase_storage_service.dart';
+import '../../../locator.dart';
 
-class ProfileViewModel extends BaseViewModel {
+class PharProfileViewModel extends BaseViewModel {
   final authService = locator<AuthService>();
   File? image;
   final FirebaseStorageService _firebaseStorageService =
       FirebaseStorageService();
   final FilePickerService _filePickerService = FilePickerService();
-  AppUser appUser = AppUser();
+  Pharmacist pharmacist = Pharmacist();
   final _dbService = DatabaseService();
 
-  ProfileViewModel() {
-    appUser = authService.appUser;
+  PharProfileViewModel() {
+    pharmacist = authService.pharmacist;
   }
 
   getImage() async {
@@ -36,11 +34,11 @@ class ProfileViewModel extends BaseViewModel {
   saveData() async {
     setState(ViewState.busy);
     if (image != null) {
-      appUser.imageUrl =
-          await _firebaseStorageService.uploadImage(image!, 'userProfile');
+      pharmacist.imageUrl = await _firebaseStorageService.uploadImage(
+          image!, 'pharmacistProfile');
     }
-    await _dbService.updateClientFcm(appUser, authService.appUser.id);
-    authService.appUser = appUser;
+    await _dbService.updatePharmacist(pharmacist, authService.pharmacist.id);
+    authService.pharmacist = pharmacist;
     setState(ViewState.idle);
   }
 }

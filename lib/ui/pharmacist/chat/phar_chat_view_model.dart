@@ -1,14 +1,14 @@
-import 'package:calkitna_mobile_app/core/models/pharmacist.dart';
+import 'package:calkitna_mobile_app/core/models/app_user.dart';
+import 'package:calkitna_mobile_app/core/view_models.dart/base_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import '../../../../../locator.dart';
 import '../../../core/enums/view_state.dart';
 import '../../../core/models/chat.dart';
 import '../../../core/services/auth_service.dart';
 import '../../../core/services/database_service.dart';
-import '../../../core/view_models.dart/base_view_model.dart';
+import '../../../locator.dart';
 
-class ChatViewModel extends BaseViewModel {
+class PharChatViewModel extends BaseViewModel {
   final authService = locator<AuthService>();
   final dbService = locator<DatabaseService>();
   late Stream messagesStream;
@@ -17,7 +17,7 @@ class ChatViewModel extends BaseViewModel {
   List<Chat> messagesList = [];
   List<Chat> reverseMessagesList = [];
 
-  ChatViewModel(String stylistId) {
+  PharChatViewModel(String stylistId) {
     getChatMessges(stylistId);
   }
 
@@ -26,10 +26,10 @@ class ChatViewModel extends BaseViewModel {
   getChatMessges(String stylistId) {
     setState(ViewState.busy);
     messagesStream =
-        dbService.getMessagesStream(stylistId, authService.appUser.id!);
+        dbService.getMessagesStream(authService.pharmacist.id!, stylistId);
     messagesStream.listen((event) {
-      print('getMessgesStream');
-      print(event.snapshot.value.toString());
+      debugPrint('getMessgesStream');
+      debugPrint(event.snapshot.value.toString());
       Chat message =
           Chat.fromJson(Map<String, dynamic>.from(event.snapshot.value));
       messagesList.add(message);
@@ -44,26 +44,23 @@ class ChatViewModel extends BaseViewModel {
 
   ///
   /// Send message to db
-  sendMessage(Pharmacist stylistUser) async {
+  sendMessage(AppUser stylistUser) async {
     setState(ViewState.busy);
     msgToBeSent.createdAt = DateTime.now().toString();
-    msgToBeSent.userId = authService.appUser.id;
-    msgToBeSent.isPharmacist = false;
-    msgToBeSent.isUser = true;
+    msgToBeSent.userId = stylistUser.id;
+    msgToBeSent.isPharmacist = true;
+    msgToBeSent.isUser = false;
+    msgToBeSent.userName = stylistUser.name;
+    msgToBeSent.pharmacistName = authService.pharmacist.name;
+    msgToBeSent.userUrl = stylistUser.imageUrl;
+    msgToBeSent.pharmacistUrl = authService.pharmacist.imageUrl;
     msgToBeSent.message = controller.text;
-    msgToBeSent.userName = authService.appUser.name;
-    msgToBeSent.pharmacistName = stylistUser.name;
-    msgToBeSent.userUrl = authService.appUser.imageUrl;
-    msgToBeSent.pharmacistUrl = stylistUser.imageUrl;
-    msgToBeSent.message = controller.text;
-    msgToBeSent.pharmacistId = stylistUser.id;
+    msgToBeSent.pharmacistId = authService.pharmacist.id;
     DateTime time = DateFormat('yyyy-mm-dd HH:mm:s')
         .parse(DateTime.now().toString())
         .toLocal();
-    if (time != null) {
-      msgToBeSent.formattedTime = DateFormat('HH:mm a').format(time);
-      print('FormattedTime => ${msgToBeSent.formattedTime}');
-    }
+    msgToBeSent.formattedTime = DateFormat('HH:mm a').format(time);
+    debugPrint('FormattedTime => ${msgToBeSent.formattedTime}');
     await dbService.sendMessage(msgToBeSent);
     controller.clear();
     msgToBeSent = Chat();

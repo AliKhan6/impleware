@@ -5,20 +5,20 @@ import 'package:calkitna_mobile_app/core/enums/view_state.dart';
 import 'package:calkitna_mobile_app/ui/custom_widgets/custom_app_bar.dart';
 import 'package:calkitna_mobile_app/ui/custom_widgets/custom_button.dart';
 import 'package:calkitna_mobile_app/ui/custom_widgets/custom_text_field.dart';
-import 'package:calkitna_mobile_app/ui/screens/profile/profile_view_model.dart';
+import 'package:calkitna_mobile_app/ui/pharmacist/profile/phar_profile_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:provider/provider.dart';
 
-class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({Key? key}) : super(key: key);
+class PharProfileScreen extends StatelessWidget {
+  const PharProfileScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (context) => ProfileViewModel(),
-      child: Consumer<ProfileViewModel>(
+      create: (context) => PharProfileViewModel(),
+      child: Consumer<PharProfileViewModel>(
         builder: (context, model, child) {
           return ModalProgressHUD(
             inAsyncCall: model.state == ViewState.busy,
@@ -34,14 +34,14 @@ class ProfileScreen extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 12),
                       child: Column(children: [
                         model.image == null
-                            ? model.authService.appUser.imageUrl == null
+                            ? model.authService.pharmacist.imageUrl == null
                                 ? CircleAvatar(
                                     backgroundImage: const AssetImage(
                                         '$staticAsset/profile.jpg'),
                                     radius: 48.r)
                                 : CircleAvatar(
                                     backgroundImage: NetworkImage(
-                                        model.authService.appUser.imageUrl!),
+                                        model.authService.pharmacist.imageUrl!),
                                     radius: 48.r)
                             : CircleAvatar(
                                 backgroundImage: FileImage(model.image!),
@@ -85,7 +85,7 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 
-  textFields(ProfileViewModel model) {
+  textFields(PharProfileViewModel model) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       /// email text field
       Text(
@@ -94,10 +94,10 @@ class ProfileScreen extends StatelessWidget {
       ),
       SizedBox(height: 8.h),
       CustomTextField(
-        initialValue: model.authService.appUser.name,
+        initialValue: model.authService.pharmacist.name,
         fillColor: const Color(0xFFEBEBEB),
         onChange: (value) {
-          model.appUser.name = value;
+          model.pharmacist.name = value;
         },
         inputType: TextInputType.emailAddress,
         disableBorder: true,
@@ -111,10 +111,10 @@ class ProfileScreen extends StatelessWidget {
       ),
       SizedBox(height: 8.h),
       CustomTextField(
-        initialValue: model.authService.appUser.username,
+        initialValue: model.authService.pharmacist.username,
         fillColor: const Color(0xFFEBEBEB),
         onChange: (value) {
-          model.appUser.username = value;
+          model.pharmacist.username = value;
         },
         inputType: TextInputType.emailAddress,
         disableBorder: true,
@@ -122,20 +122,7 @@ class ProfileScreen extends StatelessWidget {
       SizedBox(height: 15.h),
 
       /// email text field
-      Text(
-        'Emirate Number',
-        style: bodyTextStyleRoboto.copyWith(fontSize: 14.sp),
-      ),
-      SizedBox(height: 8.h),
-      CustomTextField(
-        initialValue: model.authService.appUser.emirateNumber,
-        fillColor: const Color(0xFFEBEBEB),
-        onChange: (value) {
-          model.appUser.emirateNumber = value;
-        },
-        inputType: TextInputType.emailAddress,
-        disableBorder: true,
-      ),
+
       SizedBox(height: 15.h),
     ]);
   }

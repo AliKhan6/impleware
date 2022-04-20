@@ -8,22 +8,21 @@ import 'package:calkitna_mobile_app/core/view_models.dart/base_view_model.dart';
 import 'package:calkitna_mobile_app/locator.dart';
 import 'package:get/get.dart';
 
-class MyConditionViewModel extends BaseViewModel {
+class UserConditionViewModel extends BaseViewModel {
   final _dbService = DatabaseService();
   List<Medicine> medicines = [];
   List<SymptomChecker> symptoms = [];
   AppUser appUser = AppUser();
   SymptomChecker updateSymptoms = SymptomChecker();
 
-  MyConditionViewModel() {
+  UserConditionViewModel(this.appUser) {
     getMySymptoms();
     getMyMedicines();
   }
 
   getMySymptoms() async {
     setState(ViewState.busy);
-    symptoms =
-        await _dbService.getMySymptoms(locator<AuthService>().appUser.id!);
+    symptoms = await _dbService.getMySymptoms(appUser.id!);
     if (symptoms.isNotEmpty) {
       updateSymptoms = symptoms[0];
     }
@@ -32,8 +31,7 @@ class MyConditionViewModel extends BaseViewModel {
 
   getMyMedicines() async {
     setState(ViewState.busy);
-    medicines =
-        await _dbService.getAllMedicines(locator<AuthService>().appUser.id!);
+    medicines = await _dbService.getAllMedicines(appUser.id!);
     setState(ViewState.idle);
   }
 
@@ -41,11 +39,9 @@ class MyConditionViewModel extends BaseViewModel {
     setState(ViewState.busy);
     Get.back();
     if (symptoms.isEmpty) {
-      await _dbService.addMySymptoms(
-          locator<AuthService>().appUser.id!, updateSymptoms);
+      await _dbService.addMySymptoms(appUser.id!, updateSymptoms);
     } else {
-      await _dbService.updateMySymptoms(
-          locator<AuthService>().appUser.id!, updateSymptoms);
+      await _dbService.updateMySymptoms(appUser.id!, updateSymptoms);
     }
     setState(ViewState.idle);
   }
