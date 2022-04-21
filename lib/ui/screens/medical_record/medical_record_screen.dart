@@ -1,6 +1,10 @@
 import 'package:calkitna_mobile_app/core/models/app_user.dart';
+import 'package:calkitna_mobile_app/core/models/patient_record.dart';
 import 'package:calkitna_mobile_app/ui/custom_widgets/custom_app_bar.dart';
+import 'package:calkitna_mobile_app/ui/screens/medical_record/allergies/allergies_screen.dart';
+import 'package:calkitna_mobile_app/ui/screens/medical_record/measurements/measurement_screen.dart';
 import 'package:calkitna_mobile_app/ui/screens/medical_record/medical_record_view_model.dart';
+import 'package:calkitna_mobile_app/ui/screens/medical_record/patient_record/patient_record_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -12,7 +16,8 @@ import 'documents/documents_screen.dart';
 
 class MedicalRecordScreen extends StatelessWidget {
   final AppUser? appUser;
-  const MedicalRecordScreen({Key? key, this.appUser}) : super(key: key);
+  final onTap;
+  const MedicalRecordScreen({Key? key, this.appUser, this.onTap}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +53,16 @@ class MedicalRecordScreen extends StatelessWidget {
                             padding: const EdgeInsets.only(left: 4.0, right: 4),
                             child: GestureDetector(
                               onTap: appUser != null
-                                  ? () {
+                                  ? index == 0?  () {
+                                      Get.to(() =>
+                                          PatientRecordScreen(appUser: appUser));
+                                    } : index ==1 ? () {
+                                      Get.to(() =>
+                                          AllergiesScreen(appUser: appUser));
+                                    } : index ==2 ?() {
+                                      Get.to(() =>
+                                          MeasurementScreen(appUser: appUser));
+                                    } :  () {
                                       Get.to(() =>
                                           DocuemntScreen(appUser: appUser));
                                     }

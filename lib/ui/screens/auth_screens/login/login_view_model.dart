@@ -25,6 +25,7 @@ class LoginViewModel extends BaseViewModel {
           middleText: authResult.errorMessage ??
               'An error occured while login.\nCheck you internet and try again.');
     }
+    setState(ViewState.idle);
   }
 
   showPassword() {

@@ -1,53 +1,64 @@
 import 'package:calkitna_mobile_app/core/constants/colors.dart';
 import 'package:calkitna_mobile_app/core/constants/style.dart';
+import 'package:calkitna_mobile_app/core/enums/view_state.dart';
+import 'package:calkitna_mobile_app/core/models/app_user.dart';
 import 'package:calkitna_mobile_app/ui/custom_widgets/custom_app_bar.dart';
 import 'package:calkitna_mobile_app/ui/custom_widgets/custom_button.dart';
 import 'package:calkitna_mobile_app/ui/custom_widgets/custom_text_field.dart';
 import 'package:calkitna_mobile_app/ui/screens/medical_record/measurements/measurement_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:provider/provider.dart';
 
 class MeasurementScreen extends StatelessWidget {
-  const MeasurementScreen({Key? key}) : super(key: key);
+  final AppUser? appUser;
+  const MeasurementScreen({Key? key, this.appUser}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (context) => MeasurementViewModel(),
+      create: (context) => MeasurementViewModel(appUser: appUser),
       child: Consumer<MeasurementViewModel>(
         builder: (context, model, child) {
-          return Scaffold(
-            body: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: Column(
-                children: [
-                  SizedBox(height: 70.h),
-                  customAppBar('Add Measurements'),
-                  SizedBox(height: 40.h),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        ///
-                        /// textFields
-                        ///
-                        textFields(model),
-                        SizedBox(height: 50.h),
-                        Center(
-                          child: CustomButton(
-                            width: 0.5.sw,
-                            buttonColor: primaryColor,
-                            text: 'SAVE',
-                            textColor: Colors.black,
-                            onTap: () {},
-                          ),
-                        )
-                      ],
-                    ),
-                  )
-                ],
+          return ModalProgressHUD(
+            inAsyncCall: model.state == ViewState.busy,
+            child: Scaffold(
+              body: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: Column(
+                  children: [
+                    SizedBox(height: 70.h),
+                    customAppBar('Add Measurements'),
+                    SizedBox(height: 40.h),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          ///
+                          /// textFields
+                          ///
+                          textFields(model),
+                          SizedBox(height: 50.h),
+                          appUser != null
+                              ? Container()
+                              : Center(
+                                  child: CustomButton(
+                                    width: 0.5.sw,
+                                    buttonColor: primaryColor,
+                                    text: 'SAVE',
+                                    textColor: Colors.black,
+                                    onTap: () {
+                                      model.savePatientRecord();
+                                    },
+                                  ),
+                                )
+                        ],
+                      ),
+                    )
+                  ],
+                ),
               ),
             ),
           );
@@ -128,7 +139,7 @@ class MeasurementScreen extends StatelessWidget {
               ],
             ),
             onSelected: (v) {
-              model.changeDropDown(v);
+              appUser != null ? null : model.changeDropDown(v);
             },
           )),
     ]);

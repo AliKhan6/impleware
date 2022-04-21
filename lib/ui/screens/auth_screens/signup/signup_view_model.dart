@@ -28,6 +28,7 @@ class SignupViewModel extends BaseViewModel {
           middleText: authResult.errorMessage ??
               'An error occured while signing up.\nCheck you internet and try again.');
     }
+    setState(ViewState.idle);
   }
 
   showPassword() {
