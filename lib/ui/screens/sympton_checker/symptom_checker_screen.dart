@@ -26,77 +26,86 @@ class SymptomCheckerScreen extends StatelessWidget {
           return ModalProgressHUD(
             inAsyncCall: model.state == ViewState.busy,
             child: Scaffold(
-              body: Column(children: [
-                SizedBox(height: 70.h),
-                customAppBar('Symptom Checker'),
-                SizedBox(height: 30.h),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                            'Feeling uncomfortable? Insert your symptoms for a help!',
-                            textAlign: TextAlign.center,
-                            style: bodyTextStyleRoboto.copyWith(
-                                fontSize: 18.sp,
-                                color: primaryColor.withOpacity(0.7))),
-                        SizedBox(height: 50.h),
+              body: SingleChildScrollView(
+                child: Column(children: [
+                  SizedBox(height: 70.h),
+                  customAppBar('Symptom Checker'),
+                  SizedBox(height: 30.h),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                              'Feeling uncomfortable? Insert your symptoms for a help!',
+                              textAlign: TextAlign.center,
+                              style: bodyTextStyleRoboto.copyWith(
+                                  fontSize: 18.sp,
+                                  color: primaryColor.withOpacity(0.7))),
+                          SizedBox(height: 50.h),
 
-                        /// email text field
-                        Text(
-                          'Enter Symptoms below',
-                          style: bodyTextStyleRoboto.copyWith(fontSize: 14.sp),
-                        ),
-                        SizedBox(height: 15.h),
-                        CustomTextField(
-                          fillColor: const Color(0xFFEBEBEB),
-                          onChange: (value) {
-                            model.symptomChecker.symptom1 = value;
-                          },
-                          inputType: TextInputType.emailAddress,
-                          disableBorder: true,
-                        ),
-                        SizedBox(height: 10.h),
-                        CustomTextField(
-                          fillColor: const Color(0xFFEBEBEB),
-                          onChange: (value) {
-                            model.symptomChecker.symptom2 = value;
-                          },
-                          inputType: TextInputType.emailAddress,
-                          disableBorder: true,
-                        ),
-                        SizedBox(height: 10.h),
-                        CustomTextField(
-                          fillColor: const Color(0xFFEBEBEB),
-                          onChange: (value) {
-                            model.symptomChecker.symptom3 = value;
-                          },
-                          inputType: TextInputType.emailAddress,
-                          disableBorder: true,
-                        ),
-                        SizedBox(height: 40.h),
-                        GestureDetector(
-                          onTap: () {
-                            if (_formKey.currentState!.validate()) {
-                              model.checkSymptoms();
-                            }
-                          },
-                          child: Center(
-                            child: ImageContainer(
-                              assetImage: '$staticAsset/search.png',
-                              height: 70.h,
-                              width: 70.w,
-                            ),
+                          /// email text field
+                          Text(
+                            'Enter Symptoms below',
+                            style:
+                                bodyTextStyleRoboto.copyWith(fontSize: 14.sp),
                           ),
-                        )
-                      ],
+                          SizedBox(height: 15.h),
+                          CustomTextField(
+                            fillColor: const Color(0xFFEBEBEB),
+                            onChange: (value) {
+                              model.symptomChecker.symptom1 = value;
+                            },
+                            inputType: TextInputType.emailAddress,
+                            disableBorder: true,
+                          ),
+                          SizedBox(height: 10.h),
+                          CustomTextField(
+                            validator: (value) {
+                              return null;
+                            },
+                            fillColor: const Color(0xFFEBEBEB),
+                            onChange: (value) {
+                              model.symptomChecker.symptom2 = value;
+                            },
+                            inputType: TextInputType.emailAddress,
+                            disableBorder: true,
+                          ),
+                          SizedBox(height: 10.h),
+                          CustomTextField(
+                            validator: (value) {
+                              return null;
+                            },
+                            fillColor: const Color(0xFFEBEBEB),
+                            onChange: (value) {
+                              model.symptomChecker.symptom3 = value;
+                            },
+                            inputType: TextInputType.emailAddress,
+                            disableBorder: true,
+                          ),
+                          SizedBox(height: 40.h),
+                          GestureDetector(
+                            onTap: () {
+                              if (_formKey.currentState!.validate()) {
+                                model.checkSymptoms();
+                              }
+                            },
+                            child: Center(
+                              child: ImageContainer(
+                                assetImage: '$staticAsset/search.png',
+                                height: 70.h,
+                                width: 70.w,
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
                     ),
-                  ),
-                )
-              ]),
+                  )
+                ]),
+              ),
             ),
           );
         },

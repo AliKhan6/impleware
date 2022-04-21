@@ -6,7 +6,7 @@
      <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
    <application
         android:label="Impleware"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/launcher_icon">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

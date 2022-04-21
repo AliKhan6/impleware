@@ -27,6 +27,19 @@ class DocumentsViewModel extends BaseViewModel {
     }
     getDocuments();
   }
+  deleteDocument(Documents documents) async {
+    setState(ViewState.busy);
+    await _dbService.deleteDocument(
+        locator<AuthService>().appUser.id!, documents);
+    for (int i = 0; i < images.length; i++) {
+      if (images[i].id == documents.id) {
+        images.remove(documents);
+      }
+    }
+    Get.snackbar('Delte Success', "Document deleted successfully",
+        snackPosition: SnackPosition.BOTTOM);
+    setState(ViewState.idle);
+  }
 
   getImage() async {
     setState(ViewState.busy);
@@ -47,6 +60,7 @@ class DocumentsViewModel extends BaseViewModel {
     await _dbService.addDocument(locator<AuthService>().appUser.id!, documents);
     images.add(documents);
     image = null;
+    await getDocuments();
     Get.snackbar('Upload Success', "Document uploaded successfully",
         snackPosition: SnackPosition.BOTTOM);
     setState(ViewState.idle);

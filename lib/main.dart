@@ -13,7 +13,7 @@ void main() async {
   await Firebase.initializeApp();
   await setupLocator();
   runApp(MyApp());
-}
+} 
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.

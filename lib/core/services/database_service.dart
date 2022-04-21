@@ -12,6 +12,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:firebase_database/firebase_database.dart';
 import '../models/chat.dart';
+import '../models/settings.dart';
 
 class DatabaseService {
   final firestoreRef = FirebaseFirestore.instance;
@@ -249,6 +250,41 @@ class DatabaseService {
   }
 
   /// Register app user
+  addSettins(String id, Setting medicine) async {
+    debugPrint("User @Id => $id");
+    try {
+      await _db
+          .collection('settings')
+          .doc(id)
+          .set(medicine.toJson())
+          .then((value) => debugPrint('medicines added successfully'));
+    } catch (e, s) {
+      debugPrint('Exception @DatabaseService/addMedicine');
+      debugPrint(s.toString());
+      return false;
+    }
+  }
+
+  /// Get User from database using this funciton
+  Future<Setting> getSettins(id) async {
+    //Todo: Rename getUsers -> getUser
+    debugPrint('@getAppUser: id: $id');
+    try {
+      final snapshot = await _db.collection('settings').doc(id).get();
+      if (snapshot.exists) {
+        debugPrint('settings Data: ${snapshot.data()}');
+        return Setting.fromJson(snapshot.data()!, snapshot.id);
+      } else {
+        return Setting();
+      }
+    } catch (e, s) {
+      debugPrint('Exception @DatabaseService/getAppUser');
+      debugPrint(s.toString());
+      return Setting();
+    }
+  }
+
+  /// Register app user
   addMedicineImages(String id, String medicine) async {
     DateTime now = DateTime.now();
     debugPrint("User @Id => $id");
@@ -327,6 +363,24 @@ class DatabaseService {
           .collection('documents')
           .add(medicine.toJson())
           .then((value) => debugPrint('Document image added successfully'));
+    } catch (e, s) {
+      debugPrint('Exception @DatabaseService/addMedicine');
+      debugPrint(s.toString());
+      return false;
+    }
+  }
+
+  /// Register app user
+  deleteDocument(String id, Documents medicine) async {
+    debugPrint("User @Id => $id");
+    try {
+      await _db
+          .collection('app_user')
+          .doc(id)
+          .collection('documents')
+          .doc(medicine.id)
+          .delete()
+          .then((value) => debugPrint('Document image deleted successfully'));
     } catch (e, s) {
       debugPrint('Exception @DatabaseService/addMedicine');
       debugPrint(s.toString());
