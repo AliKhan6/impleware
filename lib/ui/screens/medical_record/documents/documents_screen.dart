@@ -29,11 +29,11 @@ class DocuemntScreen extends StatelessWidget {
                 title: 'Documents & Reports',
                 body: Column(
                   children: [
-                    SizedBox(height: 10.h),
                     Expanded(
                       child: GridView.builder(
                           physics: const BouncingScrollPhysics(),
                           shrinkWrap: true,
+                          padding: EdgeInsets.zero,
                           itemCount: model.images.length,
                           gridDelegate:
                               const SliverGridDelegateWithFixedCrossAxisCount(
@@ -57,8 +57,36 @@ class DocuemntScreen extends StatelessWidget {
                                 child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Text('${model.images[index].title}',
-                                          style: subHeadingTextStyleRoboto),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 12.0),
+                                        child: Row(
+                                          children: [
+                                            Text('${model.images[index].title}',
+                                                style:
+                                                    subHeadingTextStyleRoboto),
+                                            appUser == null
+                                                ? Row(
+                                                    children: [
+                                                      SizedBox(width: 10.w),
+                                                      GestureDetector(
+                                                        onTap: () {
+                                                          model.deleteDocument(
+                                                              model.images[
+                                                                  index]);
+                                                        },
+                                                        child: const Icon(
+                                                            Icons.delete,
+                                                            size: 20,
+                                                            color:
+                                                                primaryColor),
+                                                      )
+                                                    ],
+                                                  )
+                                                : Container()
+                                          ],
+                                        ),
+                                      ),
                                       SizedBox(height: 12.h),
                                       model.images[index].url != null
                                           ? Image.network(

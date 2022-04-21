@@ -13,6 +13,7 @@ class SymptomCheckerViewModel extends BaseViewModel {
   final _dbService = DatabaseService();
   SymptomChecker symptomChecker = SymptomChecker();
   List<Symptoms> symptoms = [];
+  List<Symptoms> foundDisease = [];
 
   SymptomCheckerViewModel() {
     getSymptoms();
@@ -25,7 +26,9 @@ class SymptomCheckerViewModel extends BaseViewModel {
   }
 
   checkSymptoms() {
+    debugPrint('checkSymptoms');
     setState(ViewState.busy);
+    foundDisease = [];
     for (int i = 0; i < symptoms.length; i++) {
       bool isFound = false;
       for (int j = 0; j < symptoms[i].symptoms!.length; j++) {
@@ -36,16 +39,16 @@ class SymptomCheckerViewModel extends BaseViewModel {
         }
       }
       if (isFound) {
-        Get.dialog(CustomDialog(symptoms[i]));
-        break;
+        foundDisease.add(symptoms[i]);
       }
     }
+    Get.dialog(CustomDialog(foundDisease));
     setState(ViewState.idle);
   }
 }
 
 class CustomDialog extends StatelessWidget {
-  final Symptoms symptoms;
+  final List<Symptoms> symptoms;
   CustomDialog(this.symptoms);
 
   @override
@@ -54,37 +57,47 @@ class CustomDialog extends StatelessWidget {
       title: Text('Disease that contains these symptoms are:',
           style: subHeadingTextStyleRoboto),
       content: SizedBox(
-        height: 0.3.sh,
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text('Disease: ${symptoms.name}',
-              style: headingTextStyleRoboto.copyWith(color: primaryColor)),
-          SizedBox(height: 14.h),
-          const Divider(height: 2),
-          SizedBox(height: 14.h),
-          Text('Symptoms are: ',
-              style: bodyTextStyleAssistant.copyWith(
-                  decoration: TextDecoration.underline,
-                  fontSize: 17.sp,
-                  color: Colors.black)),
-          SizedBox(height: 16.h),
-          Expanded(
-              child: ListView.builder(
-                  shrinkWrap: true,
-                  padding: EdgeInsets.zero,
-                  itemCount: symptoms.symptoms!.length,
-                  itemBuilder: (context, index) {
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(symptoms.symptoms![index],
-                            style: bodyTextStyleRoboto),
-                        SizedBox(height: 6.h),
-                        const Divider()
-                      ],
-                    );
-                  }))
-        ]),
-      ),
+          height: 0.5.sh,
+          child: ListView.builder(
+              physics: const BouncingScrollPhysics(),
+              padding: EdgeInsets.zero,
+              shrinkWrap: true,
+              itemCount: symptoms.length,
+              itemBuilder: (context, index) {
+                return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Disease: ${symptoms[index].name}',
+                          style: headingTextStyleRoboto.copyWith(
+                              color: primaryColor)),
+                      SizedBox(height: 14.h),
+                      const Divider(height: 2),
+                      SizedBox(height: 14.h),
+                      Text('Symptoms are: ',
+                          style: bodyTextStyleAssistant.copyWith(
+                              decoration: TextDecoration.underline,
+                              fontSize: 17.sp,
+                              color: Colors.black)),
+                      SizedBox(height: 16.h),
+                      ListView.builder(
+                          shrinkWrap: true,
+                          primary: false,
+                          physics: const NeverScrollableScrollPhysics(),
+                          padding: EdgeInsets.zero,
+                          itemCount: symptoms[index].symptoms!.length,
+                          itemBuilder: (context, i) {
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(symptoms[index].symptoms![i],
+                                    style: bodyTextStyleRoboto),
+                                SizedBox(height: 6.h),
+                                const Divider()
+                              ],
+                            );
+                          })
+                    ]);
+              })),
       actions: [
         ElevatedButton(
           style: ButtonStyle(
