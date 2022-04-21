@@ -2,6 +2,7 @@ import 'package:calkitna_mobile_app/core/constants/strings.dart';
 import 'package:calkitna_mobile_app/core/constants/style.dart';
 import 'package:calkitna_mobile_app/ui/custom_widgets/image_container.dart';
 import 'package:calkitna_mobile_app/ui/screens/home/home_view_model.dart';
+import 'package:calkitna_mobile_app/ui/screens/notificaiton/notification_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_advanced_drawer/flutter_advanced_drawer.dart';
 import 'package:get/get.dart';
@@ -89,7 +90,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                               icon: Image.asset('$staticAsset/drawer.png',
                                   height: 25.h, width: 40.w)),
                           IconButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                Get.to(() => const NotificationScreen());
+                              },
                               icon: const Icon(Icons.notifications))
                         ],
                       ),

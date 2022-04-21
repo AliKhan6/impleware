@@ -45,7 +45,7 @@ class UserDetailScreen extends StatelessWidget {
                             onTap: index == 0
                                 ? () {
                                     Get.to(() =>
-                                        MedicalRecordScreen(appUser: appUser));
+                                        MedicalRecordScreen(appUser: appUser ));
                                   }
                                 : index == 3
                                     ? () {

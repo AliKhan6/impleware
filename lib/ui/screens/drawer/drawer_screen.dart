@@ -2,10 +2,14 @@ import 'package:calkitna_mobile_app/core/constants/strings.dart';
 import 'package:calkitna_mobile_app/core/constants/style.dart';
 import 'package:calkitna_mobile_app/ui/screens/drawer/drawer_view_model.dart';
 import 'package:calkitna_mobile_app/ui/screens/profile/profile_screen.dart';
+import 'package:calkitna_mobile_app/ui/screens/setting/setting_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
+
+import '../notificaiton/notification_screen.dart';
 
 class DrawerScreen extends StatelessWidget {
   const DrawerScreen({Key? key}) : super(key: key);
@@ -63,7 +67,9 @@ class DrawerScreen extends StatelessWidget {
                     /// notificaiton
                     SizedBox(height: 8.h),
                     InkWell(
-                      onTap: () {},
+                      onTap: () {
+                        Get.to(() => const NotificationScreen());
+                      },
                       child: Row(
                         children: [
                           const Icon(Icons.notifications),
@@ -124,7 +130,9 @@ class DrawerScreen extends StatelessWidget {
                     /// notificaiton
                     SizedBox(height: 8.h),
                     InkWell(
-                      onTap: () {},
+                      onTap: () {
+                        Get.to(() => const SettingScreen());
+                      },
                       child: Row(
                         children: [
                           const Icon(Icons.settings),

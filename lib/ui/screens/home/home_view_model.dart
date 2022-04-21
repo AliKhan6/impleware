@@ -9,6 +9,7 @@ import 'package:calkitna_mobile_app/ui/screens/my_condition/my_condition_screen.
 import 'package:calkitna_mobile_app/ui/screens/pharmacists/pharmacist_screen.dart';
 import 'package:calkitna_mobile_app/ui/screens/pill_reminder/pill_reminder_screen.dart';
 import 'package:calkitna_mobile_app/ui/screens/profile/profile_screen.dart';
+import 'package:calkitna_mobile_app/ui/screens/setting/setting_screen.dart';
 import 'package:calkitna_mobile_app/ui/screens/sympton_checker/symptom_checker_screen.dart';
 import 'package:get/get.dart';
 
@@ -69,6 +70,8 @@ class HomeViewModel extends BaseViewModel {
     HomeData(
         image: '$staticAsset/app_settings.png',
         title: 'Settings',
-        onTap: () {}),
+        onTap: () {
+          Get.to(() => const SettingScreen());
+        }),
   ];
 }
